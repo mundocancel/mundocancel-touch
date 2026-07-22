@@ -2,146 +2,805 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MundoCanceles · ALUCALC 3D · Despiece Técnico</title>
-<link rel="stylesheet" href="css/style.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>MundoCanceles · ALUCALC 3D Móvil</title>
+<style>
+  /* ============================================================
+     RESET + VARIABLES + DISEÑO RESPONSIVE
+     ============================================================ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0f1115;
+    --surface: #1a1d24;
+    --surface2: #252a33;
+    --surface3: #2e3540;
+    --text: #e8edf5;
+    --text2: #8e95a5;
+    --text3: #5a6378;
+    --accent: #4a9eff;
+    --accent2: #6ab0ff;
+    --border: #2e3540;
+    --shadow: 0 8px 32px rgba(0,0,0,0.6);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --header-h: 56px;
+    --bottom-bar-h: 64px;
+  }
+  
+  .light {
+    --bg: #f0f2f7;
+    --surface: #ffffff;
+    --surface2: #e8ecf3;
+    --surface3: #d5dce6;
+    --text: #1a1d24;
+    --text2: #4a5266;
+    --text3: #7a829a;
+    --border: #d0d7e2;
+    --shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    transition: background var(--transition), color var(--transition);
+    touch-action: none;
+  }
+
+  /* ============================================================
+     LAYOUT PRINCIPAL
+     ============================================================ */
+  .app {
+    display: grid;
+    grid-template-rows: var(--header-h) 1fr var(--bottom-bar-h);
+    grid-template-columns: 1fr;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ============================================================
+     HEADER
+     ============================================================ */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 20;
+    gap: 8px;
+    min-height: var(--header-h);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--accent), #7c5cfc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .brand-title {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  .brand-sub {
+    font-size: 9px;
+    color: var(--text2);
+    font-weight: 400;
+    display: block;
+    margin-top: -1px;
+    letter-spacing: 0.3px;
+  }
+  .header-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+    font-size: 12px;
+    gap: 4px;
+    min-height: 36px;
+    min-width: 36px;
+  }
+  .icon-btn:active { transform: scale(0.92); }
+  .icon-btn:hover { background: var(--surface2); color: var(--text); }
+  .icon-btn.active { background: var(--accent); color: #fff; }
+  .icon-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .icon-btn .btn-label {
+    font-size: 10px;
+    font-weight: 500;
+    display: none;
+  }
+  @media (min-width: 500px) {
+    .icon-btn .btn-label { display: inline; }
+    .icon-btn { padding: 6px 12px; }
+  }
+
+  /* ============================================================
+     BOTÓN HAMBURGUESA (menú móvil)
+     ============================================================ */
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    padding: 8px 6px;
+    cursor: pointer;
+    min-width: 40px;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2.5px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all var(--transition);
+  }
+  .menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -4px);
+  }
+  @media (min-width: 768px) {
+    .menu-toggle { display: none; }
+  }
+
+  /* ============================================================
+     SIDEBAR (menú deslizable)
+     ============================================================ */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+  }
+  .sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    max-width: 85vw;
+    height: 100%;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px 14px;
+    overflow-y: auto;
+    z-index: 31;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-header h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .sidebar-close {
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0 8px;
+  }
+  .sidebar .section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text2);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .sidebar .type-grid,
+  .sidebar .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 5px;
+  }
+  .sidebar .type-btn {
+    padding: 8px 0;
+    background: var(--surface2);
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: var(--font);
+    touch-action: manipulation;
+  }
+  .sidebar .type-btn:active { transform: scale(0.95); }
+  .sidebar .type-btn.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+  .sidebar .color-swatch {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition);
+    min-height: 40px;
+  }
+  .sidebar .color-swatch:active { transform: scale(0.92); }
+  .sidebar .color-swatch.active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .sidebar .control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 6px;
+  }
+  .sidebar .control-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .sidebar .control-value { color: var(--text); font-weight: 600; }
+  .sidebar input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+    touch-action: none;
+  }
+  .sidebar input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.4);
+  }
+  .sidebar input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+  }
+  .sidebar .component-list {
+    font-size: 11px;
+    color: var(--text2);
+    max-height: 120px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .sidebar .component-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    list-style: none;
+  }
+  .sidebar .component-list li span:last-child {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .sidebar .info-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px 10px;
+    font-size: 12px;
+  }
+  .sidebar .info-row {
+    display: contents;
+  }
+  .sidebar .info-row span:first-child { color: var(--text2); }
+  .sidebar .info-row span:last-child {
+    color: var(--text);
+    font-weight: 500;
+    text-align: right;
+  }
+
+  /* ============================================================
+     VIEWPORT (visor 3D)
+     ============================================================ */
+  .viewport {
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+    grid-row: 2;
+    touch-action: none;
+  }
+  #canvas3d {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    touch-action: none;
+  }
+
+  /* ============================================================
+     CONTROLES SUPERPUESTOS
+     ============================================================ */
+  .view-controls {
+    position: absolute;
+    bottom: 76px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 5;
+    flex-wrap: nowrap;
+  }
+  .view-btn {
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: var(--font);
+    touch-action: manipulation;
+    min-height: 32px;
+    min-width: 32px;
+  }
+  .view-btn:active { transform: scale(0.92); }
+  .view-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  @media (max-width: 400px) {
+    .view-btn { font-size: 10px; padding: 4px 7px; min-width: 28px; }
+  }
+
+  .mode-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--surface);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+    color: var(--text2);
+    backdrop-filter: blur(8px);
+    background: rgba(26, 29, 36, 0.85);
+  }
+  .light .mode-indicator {
+    background: rgba(255, 255, 255, 0.85);
+  }
+  .badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 12px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+  }
+
+  .hud {
+    position: absolute;
+    bottom: 130px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 5;
+    font-size: 9px;
+    color: var(--text2);
+    text-align: right;
+    pointer-events: none;
+  }
+  .hud-chip {
+    background: var(--surface);
+    padding: 2px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    opacity: 0.7;
+    backdrop-filter: blur(4px);
+    background: rgba(26, 29, 36, 0.7);
+  }
+  .light .hud-chip {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .help-hint {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .help-hint {
+      display: block;
+      position: absolute;
+      bottom: 130px;
+      left: 12px;
+      font-size: 10px;
+      color: var(--text2);
+      background: var(--surface);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      line-height: 1.5;
+      opacity: 0.6;
+      z-index: 5;
+      max-width: 160px;
+      backdrop-filter: blur(4px);
+      background: rgba(26, 29, 36, 0.7);
+    }
+    .light .help-hint {
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .help-hint kbd {
+      background: var(--surface2);
+      padding: 0 5px;
+      border-radius: 3px;
+      font-size: 9px;
+      font-family: monospace;
+    }
+  }
+
+  /* ============================================================
+     BOTTOM BAR (acciones rápidas móvil)
+     ============================================================ */
+  .bottom-bar {
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0 8px;
+    min-height: var(--bottom-bar-h);
+    z-index: 10;
+    gap: 2px;
+  }
+  .bottom-bar .icon-btn {
+    flex-direction: column;
+    gap: 1px;
+    padding: 4px 8px;
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 9px;
+    border-radius: var(--radius-sm);
+  }
+  .bottom-bar .icon-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+  .bottom-bar .icon-btn .btn-label {
+    font-size: 8px;
+    display: block;
+    color: var(--text2);
+    font-weight: 400;
+  }
+  .bottom-bar .icon-btn.active .btn-label {
+    color: var(--accent);
+  }
+  @media (min-width: 500px) {
+    .bottom-bar .icon-btn .btn-label { font-size: 9px; }
+    .bottom-bar .icon-btn { min-width: 52px; }
+  }
+  @media (min-width: 768px) {
+    .bottom-bar { display: none; }
+  }
+
+  /* ============================================================
+     LOADER
+     ============================================================ */
+  .loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--bg);
+    z-index: 50;
+    transition: opacity 0.8s ease;
+  }
+  .loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text {
+    font-size: 13px;
+    color: var(--text2);
+    letter-spacing: 0.3px;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .loader-error {
+    text-align: center;
+    padding: 20px;
+  }
+  .loader-error h3 {
+    color: #ff6b6b;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .loader-error p {
+    color: var(--text2);
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .loader-error button {
+    padding: 10px 28px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    touch-action: manipulation;
+  }
+
+  /* ============================================================
+     SCROLLBAR
+     ============================================================ */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ============================================================
+     UTILIDADES RESPONSIVE
+     ============================================================ */
+  @media (max-width: 480px) {
+    :root {
+      --header-h: 50px;
+      --bottom-bar-h: 56px;
+    }
+    .brand-title { font-size: 13px; }
+    .brand-sub { font-size: 8px; }
+    .brand-logo { width: 28px; height: 28px; font-size: 14px; }
+    .mode-indicator { font-size: 9px; padding: 3px 10px; }
+    .badge { font-size: 7px; padding: 1px 6px; }
+    .sidebar { padding: 12px 10px; gap: 10px; }
+    .sidebar .type-grid, .sidebar .color-grid {
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    }
+    .sidebar .type-btn { font-size: 10px; padding: 6px 0; }
+  }
+</style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="brand-logo">M</div>
-    <div class="brand-text">
-      <span class="brand-title">MundoCanceles</span>
-      <span class="brand-sub">ALUCALC · DESPIECE TÉCNICO</span>
+<div class="app">
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="brand">
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="brand-logo">M</div>
+      <div class="brand-text">
+        <span class="brand-title">MundoCanceles</span>
+        <span class="brand-sub">ALUCALC · 3D</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeBtn" title="Tema">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <span class="btn-label">Tema</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR (menú deslizable) ===== -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>⚙️ Configuración</h2>
+      <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Tipo de Cancel</div>
+      <div class="type-grid" id="typeGrid">
+        <button class="type-btn active" data-type="fijo">Fijo</button>
+        <button class="type-btn" data-type="1hoja">1 Hoja</button>
+        <button class="type-btn" data-type="2hojas">2 Hojas</button>
+        <button class="type-btn" data-type="3hojas">3 Hojas</button>
+        <button class="type-btn" data-type="4hojas">4 Hojas</button>
+        <button class="type-btn" data-type="corrediza">Corrediza</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Dimensiones</div>
+      <div class="control-row">
+        <div class="control-label"><span>Ancho</span><span class="control-value" id="widthVal">120 cm</span></div>
+        <input type="range" id="widthSlider" min="60" max="240" value="120" step="5" />
+      </div>
+      <div class="control-row">
+        <div class="control-label"><span>Alto</span><span class="control-value" id="heightVal">140 cm</span></div>
+        <input type="range" id="heightSlider" min="60" max="240" value="140" step="5" />
+      </div>
+      <div class="control-row">
+        <div class="control-label"><span>Vidrio</span><span class="control-value" id="glassVal">6 mm</span></div>
+        <input type="range" id="glassSlider" min="3" max="12" value="6" step="1" />
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Color del Perfil</div>
+      <div class="color-grid" id="colorGrid">
+        <div class="color-swatch active" data-color="#E8E8E8" style="background:#E8E8E8" title="Blanco"></div>
+        <div class="color-swatch" data-color="#1a1a1a" style="background:#1a1a1a" title="Negro"></div>
+        <div class="color-swatch" data-color="#B8BCC2" style="background:#B8BCC2" title="Plata"></div>
+        <div class="color-swatch" data-color="#5C4033" style="background:#5C4033" title="Bronce"></div>
+        <div class="color-swatch" data-color="#2F4F4F" style="background:#2F4F4F" title="Verde"></div>
+        <div class="color-swatch" data-color="#C9A961" style="background:linear-gradient(135deg,#C9A961,#8B6914)" title="Dorado"></div>
+        <div class="color-swatch" data-color="#8B0000" style="background:#8B0000" title="Rojo"></div>
+        <div class="color-swatch" data-color="#1E3A5F" style="background:#1E3A5F" title="Azul"></div>
+        <div class="color-swatch" data-color="#6B4423" style="background:linear-gradient(135deg,#8B5A2B,#4A2E17)" title="Madera"></div>
+        <div class="color-swatch" data-color="#4A5568" style="background:#4A5568" title="Grafito"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Lista de Componentes</div>
+      <ul class="component-list" id="componentList"></ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Especificaciones</div>
+      <div class="info-table" id="infoTable">
+        <div class="info-row"><span>Área</span><span id="infoArea">1.68 m²</span></div>
+        <div class="info-row"><span>Perímetro</span><span id="infoPerim">5.20 m</span></div>
+        <div class="info-row"><span>Peso</span><span id="infoWeight">28.4 kg</span></div>
+        <div class="info-row"><span>Tipo</span><span id="infoType">Fijo</span></div>
+        <div class="info-row"><span>Perfil</span><span id="infoProfile">Alu 6063-T5</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== VIEWPORT 3D ===== -->
+  <div class="viewport" id="viewport">
+    <canvas id="canvas3d" tabindex="0"></canvas>
+
+    <div class="view-controls">
+      <button class="view-btn active" data-view="3d">3D</button>
+      <button class="view-btn" data-view="front">F</button>
+      <button class="view-btn" data-view="side">L</button>
+      <button class="view-btn" data-view="top">S</button>
+    </div>
+
+    <div class="mode-indicator">
+      <span id="modeText">Vista 3D</span>
+      <span class="badge" id="modeBadge">PBR</span>
+    </div>
+
+    <div class="hud">
+      <div class="hud-chip"><span id="fpsCounter">60 FPS</span></div>
+      <div class="hud-chip" id="camInfo">dist: 280cm</div>
+    </div>
+
+    <div class="help-hint">
+      <strong>Controles:</strong><br>
+      🖱️ Arrastra · Scroll zoom<br>
+      ⌨️ <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> rotar
+    </div>
+
+    <div class="loader" id="loader">
+      <div class="spinner"></div>
+      <div class="loader-text">MundoCanceles · Cargando...</div>
     </div>
   </div>
-  <div class="header-actions">
-    <button class="icon-btn" id="explodeBtn" title="Vista de despiece">
+
+  <!-- ===== BOTTOM BAR (móvil) ===== -->
+  <div class="bottom-bar">
+    <button class="icon-btn" id="explodeBtn" title="Despiece">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       <span class="btn-label">Despiece</span>
     </button>
-    <button class="icon-btn" id="labelsBtn" title="Mostrar etiquetas">
+    <button class="icon-btn" id="labelsBtn" title="Etiquetas">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
       <span class="btn-label">Etiquetas</span>
     </button>
-    <button class="icon-btn active" id="dimsBtn" title="Acotaciones">
+    <button class="icon-btn active" id="dimsBtn" title="Acotar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 3H3v18h18V3z"/><path d="M9 3v18M3 9h18"/></svg>
       <span class="btn-label">Acotar</span>
     </button>
-    <button class="icon-btn" id="resetBtn" title="Resetear vista">
+    <button class="icon-btn" id="resetBtn" title="Reset">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
       <span class="btn-label">Reset</span>
     </button>
-    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
-      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      <span class="btn-label">Tema</span>
+    <button class="icon-btn" id="menuBtnMobile" title="Menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="btn-label">Menú</span>
     </button>
-  </div>
-</header>
-
-<aside>
-  <div class="section">
-    <div class="section-title">Tipo de Cancel</div>
-    <div class="type-grid" id="typeGrid">
-      <button class="type-btn active" data-type="fijo">Fijo</button>
-      <button class="type-btn" data-type="1hoja">1 Hoja</button>
-      <button class="type-btn" data-type="2hojas">2 Hojas</button>
-      <button class="type-btn" data-type="3hojas">3 Hojas</button>
-      <button class="type-btn" data-type="4hojas">4 Hojas</button>
-      <button class="type-btn" data-type="corrediza">Corrediza</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Dimensiones</div>
-    <div class="control-row">
-      <div class="control-label"><span>Ancho</span><span class="control-value" id="widthVal">120 cm</span></div>
-      <input type="range" id="widthSlider" min="60" max="240" value="120" step="5" />
-    </div>
-    <div class="control-row">
-      <div class="control-label"><span>Alto</span><span class="control-value" id="heightVal">140 cm</span></div>
-      <input type="range" id="heightSlider" min="60" max="240" value="140" step="5" />
-    </div>
-    <div class="control-row">
-      <div class="control-label"><span>Vidrio</span><span class="control-value" id="glassVal">6 mm</span></div>
-      <input type="range" id="glassSlider" min="3" max="12" value="6" step="1" />
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Color del Perfil</div>
-    <div class="color-grid" id="colorGrid">
-      <div class="color-swatch active" data-color="#E8E8E8" style="background:#E8E8E8" title="Blanco"></div>
-      <div class="color-swatch" data-color="#1a1a1a" style="background:#1a1a1a" title="Negro"></div>
-      <div class="color-swatch" data-color="#B8BCC2" style="background:#B8BCC2" title="Plata"></div>
-      <div class="color-swatch" data-color="#5C4033" style="background:#5C4033" title="Bronce"></div>
-      <div class="color-swatch" data-color="#2F4F4F" style="background:#2F4F4F" title="Verde"></div>
-      <div class="color-swatch" data-color="#C9A961" style="background:linear-gradient(135deg,#C9A961,#8B6914)" title="Dorado"></div>
-      <div class="color-swatch" data-color="#8B0000" style="background:#8B0000" title="Rojo"></div>
-      <div class="color-swatch" data-color="#1E3A5F" style="background:#1E3A5F" title="Azul"></div>
-      <div class="color-swatch" data-color="#6B4423" style="background:linear-gradient(135deg,#8B5A2B,#4A2E17)" title="Madera"></div>
-      <div class="color-swatch" data-color="#4A5568" style="background:#4A5568" title="Grafito"></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Lista de Componentes</div>
-    <div class="component-list" id="componentList"></div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Especificaciones</div>
-    <div class="info-table">
-      <div class="info-row"><span>Área total</span><span id="infoArea">1.68 m²</span></div>
-      <div class="info-row"><span>Perímetro</span><span id="infoPerim">5.20 m</span></div>
-      <div class="info-row"><span>Peso estimado</span><span id="infoWeight">28.4 kg</span></div>
-      <div class="info-row"><span>Tipo</span><span id="infoType">Fijo</span></div>
-      <div class="info-row"><span>Perfil</span><span id="infoProfile">Aluminio 6063-T5</span></div>
-    </div>
-  </div>
-</aside>
-
-<div class="viewport" id="viewport">
-  <canvas id="canvas3d" tabindex="0" role="img" aria-label="Visor 3D de cancel MundoCanceles"></canvas>
-  <svg id="overlaySvg"></svg>
-
-  <div class="view-controls">
-    <button class="view-btn active" data-view="3d" title="Vista 3D">3D</button>
-    <button class="view-btn" data-view="front" title="Vista Frontal">F</button>
-    <button class="view-btn" data-view="side" title="Vista Lateral">L</button>
-    <button class="view-btn" data-view="top" title="Vista Superior">S</button>
-  </div>
-
-  <div class="mode-indicator" id="modeIndicator">
-    <span id="modeText">Vista 3D</span>
-    <span class="badge" id="modeBadge">PBR</span>
-  </div>
-
-  <div class="dimension-label" id="labelWidth" style="display:none;">
-    <span class="value" id="labelWidthVal">120</span><span class="unit">cm</span>
-  </div>
-  <div class="dimension-label" id="labelHeight" style="display:none;">
-    <span class="value" id="labelHeightVal">140</span><span class="unit">cm</span>
-  </div>
-
-  <div class="hud">
-    <div class="hud-chip"><span class="dot"></span><span id="fpsCounter">60 FPS</span></div>
-    <div class="hud-chip">PBR · HDRI</div>
-  </div>
-
-  <div class="help-hint">
-    <strong>Controles:</strong><br>
-    🖱️ Arrastra para rotar · Scroll zoom<br>
-    ⌨️ <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> rotar
-  </div>
-
-  <div class="loader" id="loader">
-    <div class="spinner"></div>
-    <div class="loader-text">MundoCanceles · Cargando despiece técnico...</div>
   </div>
 </div>
 
+<!-- ===== THREE.JS ===== -->
 <script type="importmap">
 {
   "imports": {
@@ -150,7 +809,539 @@
   }
 }
 </script>
-<script type="module" src="js/main.js"></script>
 
+<script type="module">
+  // ============================================================
+  //  MUNDOCANCELES 3D – VERSIÓN MÓVIL + PROFESIONAL
+  //  Características:
+  //  - Sidebar deslizable (hamburguesa)
+  //  - Bottom bar para acciones rápidas en móvil
+  //  - Controles táctiles optimizados
+  //  - Persistencia en localStorage
+  //  - OrbitControls con inercia
+  //  - Despiece animado
+  //  - Tema claro/oscuro
+  //  - Manejo de errores
+  // ============================================================
+
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  // ---------- DOM refs ----------
+  const canvas = document.getElementById('canvas3d');
+  const loaderEl = document.getElementById('loader');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebarClose = document.getElementById('sidebarClose');
+  const menuBtnMobile = document.getElementById('menuBtnMobile');
+
+  const widthSlider = document.getElementById('widthSlider');
+  const heightSlider = document.getElementById('heightSlider');
+  const glassSlider = document.getElementById('glassSlider');
+  const widthVal = document.getElementById('widthVal');
+  const heightVal = document.getElementById('heightVal');
+  const glassVal = document.getElementById('glassVal');
+  const typeGrid = document.getElementById('typeGrid');
+  const colorGrid = document.getElementById('colorGrid');
+  const componentList = document.getElementById('componentList');
+  const infoArea = document.getElementById('infoArea');
+  const infoPerim = document.getElementById('infoPerim');
+  const infoWeight = document.getElementById('infoWeight');
+  const infoType = document.getElementById('infoType');
+  const infoProfile = document.getElementById('infoProfile');
+  const fpsCounter = document.getElementById('fpsCounter');
+  const camInfo = document.getElementById('camInfo');
+  const modeText = document.getElementById('modeText');
+  const explodeBtn = document.getElementById('explodeBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const themeBtn = document.getElementById('themeBtn');
+  const viewBtns = document.querySelectorAll('.view-btn');
+
+  // ---------- Estado ----------
+  const state = {
+    width: 120,
+    height: 140,
+    glass: 6,
+    type: 'fijo',
+    color: '#E8E8E8',
+    exploded: false,
+    theme: 'dark',
+    view: '3d',
+  };
+
+  // ---------- Cargar estado desde localStorage ----------
+  function loadState() {
+    try {
+      const saved = localStorage.getItem('mundoCanelesState');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        Object.assign(state, parsed);
+        widthSlider.value = state.width;
+        heightSlider.value = state.height;
+        glassSlider.value = state.glass;
+        widthVal.textContent = state.width + ' cm';
+        heightVal.textContent = state.height + ' cm';
+        glassVal.textContent = state.glass + ' mm';
+        document.querySelectorAll('.type-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.type === state.type);
+        });
+        document.querySelectorAll('.color-swatch').forEach(el => {
+          el.classList.toggle('active', el.dataset.color === state.color);
+        });
+        if (state.theme === 'light') {
+          document.body.classList.add('light');
+        } else {
+          document.body.classList.remove('light');
+        }
+      }
+    } catch (_) { /* ignorar */ }
+  }
+  loadState();
+
+  function saveState() {
+    try {
+      localStorage.setItem('mundoCanelesState', JSON.stringify(state));
+    } catch (_) { /* ignorar */ }
+  }
+
+  // ---------- Menú lateral (móvil) ----------
+  function toggleMenu(open) {
+    const isOpen = open !== undefined ? open : !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', isOpen);
+    sidebarOverlay.classList.toggle('open', isOpen);
+    menuToggle.classList.toggle('active', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  menuToggle.addEventListener('click', () => toggleMenu());
+  sidebarClose.addEventListener('click', () => toggleMenu(false));
+  sidebarOverlay.addEventListener('click', () => toggleMenu(false));
+  menuBtnMobile?.addEventListener('click', () => toggleMenu());
+
+  // Cerrar menú al cambiar tipo/color/dimensiones (para móvil)
+  const closeMenuAfter = (el) => {
+    el.addEventListener('click', () => {
+      if (window.innerWidth < 768) setTimeout(() => toggleMenu(false), 300);
+    });
+    el.addEventListener('input', () => {
+      if (window.innerWidth < 768) setTimeout(() => toggleMenu(false), 400);
+    });
+  };
+  document.querySelectorAll('.type-btn, .color-swatch').forEach(closeMenuAfter);
+  [widthSlider, heightSlider, glassSlider].forEach(closeMenuAfter);
+
+  // ---------- Three.js setup ----------
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(state.theme === 'dark' ? 0x0f1115 : 0xf0f2f7);
+
+  const camera = new THREE.PerspectiveCamera(40, canvas.clientWidth / canvas.clientHeight, 1, 2000);
+  camera.position.set(240, 180, 280);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 80;
+  controls.maxDistance = 600;
+  controls.target.set(0, 0, 0);
+  controls.update();
+
+  // ---------- Luces ----------
+  const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
+  scene.add(ambientLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 2.2);
+  dirLight.position.set(200, 300, 150);
+  dirLight.castShadow = true;
+  dirLight.shadow.mapSize.width = 1024;
+  dirLight.shadow.mapSize.height = 1024;
+  scene.add(dirLight);
+
+  const fillLight = new THREE.DirectionalLight(0x8a9cff, 0.6);
+  fillLight.position.set(-150, 100, -100);
+  scene.add(fillLight);
+
+  const hemiLight = new THREE.HemisphereLight(0x8a9cff, 0x443322, 0.5);
+  scene.add(hemiLight);
+
+  // ---------- Grupo del cancel ----------
+  const cancelGroup = new THREE.Group();
+  scene.add(cancelGroup);
+
+  let frameParts = {
+    frame: null,
+    glass: null,
+    handles: null,
+    hinges: null,
+  };
+
+  // ---------- Construir modelo 3D ----------
+  function buildCancel() {
+    while (cancelGroup.children.length) {
+      const child = cancelGroup.children[0];
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) child.material.dispose();
+      cancelGroup.remove(child);
+    }
+    frameParts = { frame: null, glass: null, handles: null, hinges: null };
+
+    const w = state.width;
+    const h = state.height;
+    const glassThick = state.glass / 10;
+    const color = new THREE.Color(state.color);
+
+    const frameMat = new THREE.MeshStandardMaterial({
+      color: color,
+      metalness: 0.7,
+      roughness: 0.3,
+      envMapIntensity: 1.0,
+    });
+
+    const frameGeo = new THREE.BoxGeometry(w, 3.5, 4.5);
+    const frameMat2 = frameMat.clone();
+
+    const topBar = new THREE.Mesh(frameGeo, frameMat);
+    topBar.position.set(0, h/2 - 1.8, 0);
+    topBar.castShadow = true;
+    cancelGroup.add(topBar);
+
+    const bottomBar = new THREE.Mesh(frameGeo, frameMat2);
+    bottomBar.position.set(0, -h/2 + 1.8, 0);
+    bottomBar.castShadow = true;
+    cancelGroup.add(bottomBar);
+
+    const verticalGeo = new THREE.BoxGeometry(3.5, h - 3.5, 4.5);
+    const leftBar = new THREE.Mesh(verticalGeo, frameMat);
+    leftBar.position.set(-w/2 + 1.8, 0, 0);
+    leftBar.castShadow = true;
+    cancelGroup.add(leftBar);
+
+    const rightBar = new THREE.Mesh(verticalGeo, frameMat2);
+    rightBar.position.set(w/2 - 1.8, 0, 0);
+    rightBar.castShadow = true;
+    cancelGroup.add(rightBar);
+
+    frameParts.frame = [topBar, bottomBar, leftBar, rightBar];
+
+    // Vidrio
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0xccddff,
+      metalness: 0.0,
+      roughness: 0.05,
+      transparent: true,
+      opacity: 0.65,
+      envMapIntensity: 0.8,
+      clearcoat: 0.3,
+      side: THREE.DoubleSide,
+    });
+    const glassGeo = new THREE.BoxGeometry(w - 8, h - 8, glassThick);
+    const glassMesh = new THREE.Mesh(glassGeo, glassMat);
+    glassMesh.position.set(0, 0, 0.2);
+    glassMesh.castShadow = true;
+    cancelGroup.add(glassMesh);
+    frameParts.glass = glassMesh;
+
+    // Bisagras
+    const hingeMat = new THREE.MeshStandardMaterial({
+      color: 0x888899,
+      metalness: 0.9,
+      roughness: 0.2,
+    });
+    const hingePositions = [
+      [-w/2 + 2, h/2 - 12, 0],
+      [-w/2 + 2, -h/2 + 12, 0],
+    ];
+    const hinges = [];
+    for (const pos of hingePositions) {
+      const hingeGeo = new THREE.CylinderGeometry(1.2, 1.2, 2.5, 8);
+      const hinge = new THREE.Mesh(hingeGeo, hingeMat);
+      hinge.position.set(pos[0], pos[1], pos[2] + 2.5);
+      hinge.rotation.x = Math.PI / 2;
+      hinge.castShadow = true;
+      cancelGroup.add(hinge);
+      hinges.push(hinge);
+    }
+    frameParts.hinges = hinges;
+
+    // Manija
+    const handleMat = new THREE.MeshStandardMaterial({
+      color: 0xccccdd,
+      metalness: 0.8,
+      roughness: 0.15,
+    });
+    const handleGroup = new THREE.Group();
+    const barGeo = new THREE.BoxGeometry(12, 1.2, 1.8);
+    const bar = new THREE.Mesh(barGeo, handleMat);
+    bar.position.set(0, 0, 0);
+    handleGroup.add(bar);
+    const knobGeo = new THREE.SphereGeometry(1.2, 8, 8);
+    const knob1 = new THREE.Mesh(knobGeo, handleMat);
+    knob1.position.set(-5.5, 0, 0);
+    handleGroup.add(knob1);
+    const knob2 = new THREE.Mesh(knobGeo, handleMat);
+    knob2.position.set(5.5, 0, 0);
+    handleGroup.add(knob2);
+    handleGroup.position.set(w/2 - 4, 0, 2.8);
+    handleGroup.castShadow = true;
+    cancelGroup.add(handleGroup);
+    frameParts.handles = handleGroup;
+
+    updateSpecs();
+    updateComponentList();
+  }
+
+  // ---------- Actualizar especificaciones ----------
+  function updateSpecs() {
+    const w = state.width / 100;
+    const h = state.height / 100;
+    const area = w * h;
+    const perim = 2 * (w + h);
+    const weight = area * 18 + 2.5;
+    infoArea.textContent = area.toFixed(2) + ' m²';
+    infoPerim.textContent = perim.toFixed(2) + ' m';
+    infoWeight.textContent = weight.toFixed(1) + ' kg';
+    infoType.textContent = state.type.charAt(0).toUpperCase() + state.type.slice(1);
+    infoProfile.textContent = 'Alu 6063-T5';
+  }
+
+  // ---------- Actualizar lista de componentes ----------
+  function updateComponentList() {
+    const w = state.width;
+    const h = state.height;
+    const glass = state.glass;
+    const parts = [
+      { name: 'Marco Aluminio', qty: 1, detail: `${w}×${h} cm` },
+      { name: 'Vidrio Templado', qty: 1, detail: `${w-8}×${h-8}×${glass} mm` },
+      { name: 'Bisagras', qty: 2, detail: 'acero inox.' },
+      { name: 'Manija', qty: 1, detail: 'aluminio 30 cm' },
+    ];
+    if (state.type === '2hojas' || state.type === 'corrediza') {
+      parts.push({ name: 'Hoja adicional', qty: 1, detail: `${w-4}×${h} cm` });
+    }
+    if (state.type === '3hojas') {
+      parts.push({ name: 'Hojas extra', qty: 2, detail: `${w-4}×${h} cm` });
+    }
+    if (state.type === '4hojas') {
+      parts.push({ name: 'Hojas extra', qty: 3, detail: `${w-4}×${h} cm` });
+    }
+    componentList.innerHTML = parts.map(p =>
+      `<li><span>${p.name}</span><span>${p.qty} · ${p.detail}</span></li>`
+    ).join('');
+  }
+
+  // ---------- Animación de despiece ----------
+  let explodeProgress = 0;
+  let isExploding = false;
+
+  function animateExplode(target) {
+    if (isExploding) return;
+    isExploding = true;
+    const start = explodeProgress;
+    const duration = 600;
+    const startTime = performance.now();
+
+    function step(time) {
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+      explodeProgress = start + (target - start) * ease;
+
+      const offset = explodeProgress * 40;
+      if (frameParts.frame) {
+        frameParts.frame.forEach((bar, i) => {
+          const dir = i === 0 || i === 1 ? (i === 0 ? 1 : -1) : (i === 2 ? -1 : 1);
+          bar.position.z = dir * offset * 0.5;
+        });
+      }
+      if (frameParts.glass) {
+        frameParts.glass.position.z = offset * 0.8;
+      }
+      if (frameParts.hinges) {
+        frameParts.hinges.forEach((h, i) => {
+          h.position.z = 2.5 + (i === 0 ? 1 : -1) * offset * 0.3;
+        });
+      }
+      if (frameParts.handles) {
+        frameParts.handles.position.z = 2.8 + offset * 0.6;
+      }
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        isExploding = false;
+        state.exploded = target === 1;
+        explodeBtn.classList.toggle('active', state.exploded);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ---------- Resetear vista ----------
+  function resetCamera() {
+    camera.position.set(240, 180, 280);
+    controls.target.set(0, 0, 0);
+    controls.update();
+  }
+
+  // ---------- Cambiar vista ----------
+  function setView(view) {
+    state.view = view;
+    viewBtns.forEach(b => b.classList.toggle('active', b.dataset.view === view));
+    const dist = 350;
+    let pos;
+    switch (view) {
+      case 'front': pos = [0, 0, dist]; break;
+      case 'side': pos = [dist, 0, 0]; break;
+      case 'top': pos = [0, dist, 0]; break;
+      default: pos = [240, 180, 280]; break;
+    }
+    camera.position.set(pos[0], pos[1], pos[2]);
+    controls.target.set(0, 0, 0);
+    controls.update();
+    modeText.textContent = view === '3d' ? 'Vista 3D' : view === 'front' ? 'Frontal' : view === 'side' ? 'Lateral' : 'Superior';
+  }
+
+  // ---------- Tema ----------
+  function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    document.body.classList.toggle('light', state.theme === 'light');
+    scene.background = new THREE.Color(state.theme === 'dark' ? 0x0f1115 : 0xf0f2f7);
+    saveState();
+  }
+
+  // ---------- Eventos UI ----------
+  widthSlider.addEventListener('input', () => {
+    state.width = parseInt(widthSlider.value);
+    widthVal.textContent = state.width + ' cm';
+    buildCancel();
+    saveState();
+  });
+  heightSlider.addEventListener('input', () => {
+    state.height = parseInt(heightSlider.value);
+    heightVal.textContent = state.height + ' cm';
+    buildCancel();
+    saveState();
+  });
+  glassSlider.addEventListener('input', () => {
+    state.glass = parseInt(glassSlider.value);
+    glassVal.textContent = state.glass + ' mm';
+    buildCancel();
+    saveState();
+  });
+
+  typeGrid.addEventListener('click', (e) => {
+    const btn = e.target.closest('.type-btn');
+    if (!btn) return;
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.type = btn.dataset.type;
+    buildCancel();
+    saveState();
+  });
+
+  colorGrid.addEventListener('click', (e) => {
+    const swatch = e.target.closest('.color-swatch');
+    if (!swatch) return;
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    swatch.classList.add('active');
+    state.color = swatch.dataset.color;
+    buildCancel();
+    saveState();
+  });
+
+  explodeBtn.addEventListener('click', () => {
+    if (isExploding) return;
+    animateExplode(state.exploded ? 0 : 1);
+  });
+
+  resetBtn.addEventListener('click', resetCamera);
+  themeBtn.addEventListener('click', toggleTheme);
+
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => setView(btn.dataset.view));
+  });
+
+  // Teclado
+  document.addEventListener('keydown', (e) => {
+    const step = 15;
+    switch (e.key) {
+      case 'ArrowLeft': camera.position.x -= step; break;
+      case 'ArrowRight': camera.position.x += step; break;
+      case 'ArrowUp': camera.position.y += step; break;
+      case 'ArrowDown': camera.position.y -= step; break;
+      default: return;
+    }
+    controls.update();
+  });
+
+  // ---------- Render Loop ----------
+  let frameCount = 0;
+  let lastFpsUpdate = 0;
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    controls.update();
+
+    frameCount++;
+    if (time - lastFpsUpdate > 1000) {
+      fpsCounter.textContent = frameCount + ' FPS';
+      frameCount = 0;
+      lastFpsUpdate = time;
+    }
+
+    const dist = camera.position.distanceTo(controls.target);
+    camInfo.textContent = `dist: ${Math.round(dist)}cm`;
+
+    renderer.render(scene, camera);
+  }
+
+  // ---------- Resize ----------
+  function resize() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (canvas.width !== w || canvas.height !== h) {
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+  }
+  window.addEventListener('resize', resize);
+
+  // ---------- Inicialización ----------
+  function init() {
+    buildCancel();
+    setTimeout(() => {
+      loaderEl.classList.add('hidden');
+    }, 400);
+    resize();
+    animate(0);
+    if (state.view !== '3d') {
+      setView(state.view);
+    }
+  }
+
+  try {
+    init();
+  } catch (err) {
+    console.error('Error:', err);
+    loaderEl.innerHTML = `
+      <div class="loader-error">
+        <h3>⚠️ Error al cargar</h3>
+        <p>${err.message}</p>
+        <button onclick="location.reload()">Recargar</button>
+      </div>
+    `;
+  }
+
+  console.log('📱 MundoCanceles 3D v2.1 · Móvil + Desktop');
+</script>
 </body>
 </html>

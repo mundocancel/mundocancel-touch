@@ -8,34 +8,779 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary: #000000;
+            --on-primary: #FFFFFF;
+            --background: #F9F9F9;
+            --surface: #FFFFFF;
+            --surface-container: #EEEEEE;
+            --surface-container-high: #E2E2E2;
+            --surface-dim: #DADADA;
+            --text-high: #1B1B1B;
+            --text-mid: #5E5E5E;
+            --text-low: #8A8A8A;
+            --error: #BA1A1A;
+            --success: #1B5E20;
+            --outline: #CFC4C5;
+            --outline-variant: #7E7576;
+            --font-display-lg: 700 3.5rem/1.1 'Space Grotesk', sans-serif;
+            --font-headline-md: 500 1.75rem/1.2 'Space Grotesk', sans-serif;
+            --font-body-lg: 400 1rem/1.6 'Space Grotesk', sans-serif;
+            --font-label-sm: 500 0.6875rem/1.0 'Space Grotesk', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #E5E5E5;
+            background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .phone {
+            width: 100%;
+            max-width: 420px;
+            height: 800px;
+            background: var(--background);
+            border-radius: 0;
+            box-shadow: 0 0 0 8px #1B1B1B, 0 30px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .topbar {
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section-label {
+            font: var(--font-label-sm);
+            color: var(--text-mid);
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--outline);
+            border: 1px solid var(--outline);
+        }
+        .touch-card {
+            background: var(--surface);
+            padding: 28px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.15s;
+            text-align: center;
+            font-family: inherit;
+        }
+        .touch-card:active,
+        .touch-card.selected { background: var(--surface-container-high); }
+        .touch-card .material-symbols-outlined {
+            font-size: 42px;
+            font-variation-settings: 'FILL' 0, 'wght' 300;
+            color: var(--primary);
+        }
+        .card-title {
+            font: var(--font-label-sm);
+            color: var(--text-high);
+            text-transform: uppercase;
+        }
+        .divider {
+            height: 1px;
+            background: var(--outline);
+            width: 100%;
+        }
+        .pill-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+        .pill {
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            padding: 10px 16px;
+            font: var(--font-label-sm);
+            font-family: inherit;
+            color: var(--text-high);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s;
+        }
+        .pill:active { background: var(--surface-container-high); }
+        .pill .material-symbols-outlined {
+            font-size: 18px;
+            vertical-align: middle;
+            margin-right: 4px;
+            font-variation-settings: 'FILL' 0, 'wght' 400;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            margin-right: 6px;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            padding: 18px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.15s;
+            font-family: inherit;
+        }
+        .btn-primary:active { opacity: 0.85; }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 18px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            font-family: inherit;
+        }
+        .btn-secondary:active { background: var(--surface-container); }
+        .success-btn { background: var(--success); }
+        .success-btn:active { opacity: 0.85; }
+        .input-line {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--outline);
+            padding: 14px 4px;
+            font-size: 18px;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+        }
+        .input-line:focus { border-bottom: 2px solid var(--primary); }
+        .input-line::placeholder { color: var(--text-low); }
+        .input-line.short { flex: 0 0 80px; }
+        .step-indicator {
+            display: flex;
+            gap: 6px;
+        }
+        .step-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--surface-dim);
+            transition: background 0.2s;
+        }
+        .step-bar.active { background: var(--primary); }
+        .step-title {
+            font: var(--font-headline-md);
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .step-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .module-screen {
+            background: var(--surface);
+            padding: 24px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border: 1px solid var(--outline);
+        }
+        .piece-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .piece-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .piece-row .input-line { flex: 1; }
+        .price-pill {
+            font: var(--font-headline-md);
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .price-pill strong { font-weight: 700; }
+        .bottom-nav {
+            display: flex;
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 12px 0 18px;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.15s;
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+        }
+        .nav-item.active { opacity: 1; }
+        .nav-item .material-symbols-outlined {
+            font-size: 28px;
+            font-variation-settings: 'FILL' 0, 'wght' 300;
+        }
+        .help-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--on-primary);
+            padding: 8px 16px;
+            cursor: pointer;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            font-family: inherit;
+        }
+        .help-btn:active { background: rgba(255,255,255,0.2); }
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 14px 24px;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            z-index: 200;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: opacity 0.3s;
+        }
+        .hidden { display: none !important; }
+        .flex { display: flex; gap: 12px; align-items: center; }
+        .text-center { text-align: center; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+    </style>
 </head>
 <body>
-<div class="app">
-    <div class="phone">
-        <header class="statusbar">
-            <div class="logo-area">
-                <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
-                <span class="logo-text">mundocancel</span>
-            </div>
-            <button class="help-btn" id="helpBtn" type="button">AYUDA</button>
-        </header>
+<div class="phone">
+    <header class="topbar">
+        <div class="flex" style="gap:10px;">
+            <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
+            <span>mundocancel</span>
+        </div>
+        <button class="help-btn" id="helpBtn" type="button">AYUDA</button>
+    </header>
 
-        <main class="main-scroll" id="mainContent">
-            <section class="screen" id="homeScreen">
-                <div class="section-label">OPERACIONES</div>
+    <main class="main-content" id="mainContent">
+        <!-- HOME -->
+        <section class="screen" id="homeScreen">
+            <div class="section-label">OPERACIONES</div>
+            <div class="card-grid">
+                <button class="touch-card" data-action="budget" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">edit_square</span>
+                    <span class="card-title">PRESUPUESTO</span>
+                </button>
+                <button class="touch-card" data-action="projects" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">folder_open</span>
+                    <span class="card-title">PROYECTOS</span>
+                </button>
+                <button class="touch-card" data-action="cutter" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">content_cut</span>
+                    <span class="card-title">CORTE</span>
+                </button>
+                <button class="touch-card" data-action="glass" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">blur_on</span>
+                    <span class="card-title">CRISTAL</span>
+                </button>
+            </div>
+            <div class="divider"></div>
+            <div class="section-label">ACTIVIDAD RECIENTE</div>
+            <div class="pill-row" id="recentActivity">
+                <button class="pill" type="button"><span class="status-dot" aria-hidden="true"></span> #078 LISTO</button>
+                <button class="pill" type="button"><span class="material-symbols-outlined" aria-hidden="true">visibility</span> #045 VISTO</button>
+                <button class="pill" type="button"><span class="material-symbols-outlined" aria-hidden="true">payments</span> PAGO</button>
+            </div>
+        </section>
+
+        <!-- PROYECTOS -->
+        <section class="screen hidden" id="projectsScreen">
+            <div class="module-screen">
+                <div class="section-label">PROYECTOS ACTIVOS</div>
+                <input class="input-line" id="projectSearch" placeholder="BUSCAR PROYECTO O CLIENTE" autocomplete="off">
+                <div id="projectList"></div>
+                <button class="btn-secondary back-btn" type="button">VOLVER</button>
+            </div>
+        </section>
+
+        <!-- PRESUPUESTO -->
+        <section class="screen hidden" id="budgetScreen">
+            <div class="module-screen">
+                <div class="section-label">NUEVO PRESUPUESTO</div>
+                <div class="step-indicator">
+                    <div class="step-bar active" data-step="1"></div>
+                    <div class="step-bar" data-step="2"></div>
+                    <div class="step-bar" data-step="3"></div>
+                </div>
+                <div class="step-panel" id="budgetStep1">
+                    <div class="step-title">CLIENTE</div>
+                    <label class="sr-only" for="clientInput">Nombre o teléfono del cliente</label>
+                    <input class="input-line" id="clientInput" placeholder="NOMBRE O TELÉFONO" autocomplete="off">
+                    <button class="btn-primary next-btn" type="button" data-next="2">SIGUIENTE</button>
+                </div>
+                <div class="step-panel hidden" id="budgetStep2">
+                    <div class="step-title">MEDIDAS</div>
+                    <div class="flex">
+                        <label class="sr-only" for="widthInput">Ancho en milímetros</label>
+                        <input class="input-line" id="widthInput" placeholder="ANCHO (MM)" inputmode="numeric" autocomplete="off">
+                        <label class="sr-only" for="heightInput">Alto en milímetros</label>
+                        <input class="input-line" id="heightInput" placeholder="ALTO (MM)" inputmode="numeric" autocomplete="off">
+                    </div>
+                    <button class="btn-primary next-btn" type="button" data-next="3">SIGUIENTE</button>
+                </div>
+                <div class="step-panel hidden" id="budgetStep3">
+                    <div class="step-title">TIPO</div>
+                    <div class="card-grid" id="typeGrid">
+                        <button class="touch-card selected" type="button" data-type="Ventana">VENTANA</button>
+                        <button class="touch-card" type="button" data-type="Puerta">PUERTA</button>
+                        <button class="touch-card" type="button" data-type="Fijo">FIJO</button>
+                        <button class="touch-card" type="button" data-type="Corrediza">CORREDIZA</button>
+                    </div>
+                    <button class="btn-primary success-btn" id="finishBudget" type="button">ENVIAR</button>
+                </div>
+                <button class="btn-secondary back-btn" type="button">CANCELAR</button>
+            </div>
+        </section>
+
+        <!-- CORTE -->
+        <section class="screen hidden" id="cutterScreen">
+            <div class="module-screen">
+                <div class="section-label">OPTIMIZADOR DE CORTE</div>
+                <div class="card-grid" id="cutTypeGrid">
+                    <button class="touch-card" type="button" data-type="linear">
+                        <span class="material-symbols-outlined" aria-hidden="true">horizontal_rule</span>
+                        <span class="card-title">PERFIL</span>
+                    </button>
+                    <button class="touch-card" type="button" data-type="panel">
+                        <span class="material-symbols-outlined" aria-hidden="true">crop_square</span>
+                        <span class="card-title">VIDRIO</span>
+                    </button>
+                </div>
+                <div id="cutLinear" class="hidden">
+                    <div class="section-label">PIEZAS (MM)</div>
+                    <div id="linearList" class="piece-list"></div>
+                    <button class="btn-secondary" id="addLinear" type="button">+ AGREGAR</button>
+                    <button class="btn-primary" id="calcLinear" type="button">CALCULAR</button>
+                </div>
+                <div id="cutPanel" class="hidden">
+                    <div class="section-label">PAÑOS (ANCHO x ALTO)</div>
+                    <div id="panelList" class="piece-list"></div>
+                    <button class="btn-secondary" id="addPanel" type="button">+ AGREGAR</button>
+                    <button class="btn-primary" id="calcPanel" type="button">CALCULAR</button>
+                </div>
+                <button class="btn-secondary back-btn" type="button">VOLVER</button>
+            </div>
+        </section>
+
+        <!-- CRISTAL -->
+        <section class="screen hidden" id="glassScreen">
+            <div class="module-screen">
+                <div class="section-label">CRISTAL TEMPLADO</div>
                 <div class="card-grid">
-                    <button class="touch-card" data-action="budget" type="button">
-                        <span class="material-symbols-outlined" aria-hidden="true">edit_square</span>
-                        <span class="card-title">PRESUPUESTO</span>
+                    <button class="touch-card" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">shower</span>
+                        <span class="card-title">MAMPARA</span>
                     </button>
-                    <button class="touch-card" data-action="projects" type="button">
-                        <span class="material-symbols-outlined" aria-hidden="true">folder_open</span>
-                        <span class="card-title">PROYECTOS</span>
+                    <button class="touch-card" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">door_open</span>
+                        <span class="card-title">PUERTA</span>
                     </button>
-                    <button class="touch-card" data-action="cutter" type="button">
-                        <span class="material-symbols-outlined" aria-hidden="true">content_cut</span>
-                        <span class="card-title">CORTE</span>
+                </div>
+                <div class="flex">
+                    <select class="input-line" aria-label="Espesor del cristal">
+                        <option>8MM</option>
+                        <option selected>10MM</option>
+                        <option>12MM</option>
+                    </select>
+                    <select class="input-line" aria-label="Acabado del cristal">
+                        <option>INCOLORO</option>
+                        <option>BRONCE</option>
+                    </select>
+                </div>
+                <div class="price-pill">DESDE <strong>$8,450</strong></div>
+                <button class="btn-primary success-btn" id="glassConsult" type="button">CONSULTAR / WHATSAPP</button>
+                <button class="btn-secondary back-btn" type="button">VOLVER</button>
+            </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-tab="home" type="button">
+            <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+            <span>INICIO</span>
+        </button>
+        <button class="nav-item" data-tab="projects" type="button">
+            <span class="material-symbols-outlined" aria-hidden="true">folder</span>
+            <span>PROYECTOS</span>
+        </button>
+        <button class="nav-item" data-tab="tools" type="button">
+            <span class="material-symbols-outlined" aria-hidden="true">construction</span>
+            <span>HERRAMIENTAS</span>
+        </button>
+        <button class="nav-item" data-tab="profile" type="button">
+            <span class="material-symbols-outlined" aria-hidden="true">person</span>
+            <span>PERFIL</span>
+        </button>
+    </nav>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script>
+    // ==================== ESTADO ====================
+    const State = {
+        screen: 'home',
+        budgetStep: 1,
+        budgetType: 'Ventana',
+        cutType: null,
+
+        history: [],
+        historyIndex: -1,
+
+        save() {
+            localStorage.setItem('mundocancel_state', JSON.stringify({
+                screen: this.screen,
+                budgetStep: this.budgetStep,
+                budgetType: this.budgetType,
+                cutType: this.cutType,
+            }));
+        },
+        load() {
+            try {
+                const saved = localStorage.getItem('mundocancel_state');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.screen = data.screen || 'home';
+                    this.budgetStep = data.budgetStep || 1;
+                    this.budgetType = data.budgetType || 'Ventana';
+                    this.cutType = data.cutType || null;
+                }
+            } catch(e) {}
+        },
+        pushHistory() {
+            this.history = this.history.slice(0, this.historyIndex + 1);
+            this.history.push(this.screen);
+            this.historyIndex = this.history.length - 1;
+        },
+        undo() {
+            if (this.historyIndex > 0) {
+                this.historyIndex--;
+                this.screen = this.history[this.historyIndex];
+                return true;
+            }
+            return false;
+        },
+    };
+
+    // ==================== DOM ====================
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+
+    const Screens = {
+        home: $('#homeScreen'),
+        projects: $('#projectsScreen'),
+        budget: $('#budgetScreen'),
+        cutter: $('#cutterScreen'),
+        glass: $('#glassScreen'),
+    };
+
+    const BudgetSteps = {
+        1: $('#budgetStep1'),
+        2: $('#budgetStep2'),
+        3: $('#budgetStep3'),
+    };
+
+    const Toast = {
+        el: $('#toast'),
+        timer: null,
+        show(msg, dur = 2500) {
+            this.el.textContent = msg;
+            this.el.classList.remove('hidden');
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this.el.classList.add('hidden'), dur);
+        }
+    };
+
+    // ==================== NAVEGACIÓN ====================
+    function showScreen(id) {
+        if (State.screen === id) return;
+        State.pushHistory();
+        State.screen = id;
+        renderScreen();
+        State.save();
+    }
+
+    function renderScreen() {
+        Object.values(Screens).forEach(s => s.classList.add('hidden'));
+        const current = Screens[State.screen];
+        if (current) current.classList.remove('hidden');
+        updateNav();
+        $('.main-content').scrollTop = 0;
+    }
+
+    function updateNav() {
+        $$('.nav-item').forEach(item => {
+            item.classList.remove('active');
+            const tab = item.dataset.tab;
+            if (tab === 'home' && State.screen === 'home') item.classList.add('active');
+            if (tab === 'projects' && State.screen === 'projects') item.classList.add('active');
+            if (tab === 'tools' && (State.screen === 'cutter' || State.screen === 'glass')) item.classList.add('active');
+            if (tab === 'profile' && State.screen === 'profile') item.classList.add('active');
+        });
+    }
+
+    // ==================== PRESUPUESTO ====================
+    function renderBudgetSteps() {
+        Object.values(BudgetSteps).forEach(s => s.classList.add('hidden'));
+        const current = BudgetSteps[State.budgetStep];
+        if (current) current.classList.remove('hidden');
+        $$('#budgetScreen .step-bar').forEach(bar => {
+            bar.classList.toggle('active', parseInt(bar.dataset.step) <= State.budgetStep);
+        });
+    }
+
+    function nextBudget() {
+        if (State.budgetStep < 3) {
+            State.budgetStep++;
+            renderBudgetSteps();
+            State.save();
+        }
+    }
+
+    function resetBudget() {
+        State.budgetStep = 1;
+        State.budgetType = 'Ventana';
+        renderBudgetSteps();
+        $('#clientInput').value = '';
+        $('#widthInput').value = '';
+        $('#heightInput').value = '';
+        $$('#typeGrid .touch-card').forEach(c => c.classList.remove('selected'));
+        const first = $('#typeGrid .touch-card[data-type="Ventana"]');
+        if (first) first.classList.add('selected');
+    }
+
+    // ==================== CORTE ====================
+    function selectCutType(type) {
+        State.cutType = type;
+        $('#cutLinear').classList.toggle('hidden', type !== 'linear');
+        $('#cutPanel').classList.toggle('hidden', type !== 'panel');
+        State.save();
+    }
+
+    function addLinearPiece() {
+        const row = document.createElement('div');
+        row.className = 'piece-row';
+        row.innerHTML = `
+            <input class="input-line" placeholder="MM" inputmode="numeric" autocomplete="off">
+            <input class="input-line short" placeholder="CANT" value="1" inputmode="numeric" autocomplete="off">
+            <button class="btn-secondary" style="width:auto; padding:10px 14px;" type="button" onclick="this.parentElement.remove()">✕</button>
+        `;
+        $('#linearList').appendChild(row);
+    }
+
+    function addPanelPiece() {
+        const row = document.createElement('div');
+        row.className = 'piece-row';
+        row.innerHTML = `
+            <input class="input-line" placeholder="ANCHO" inputmode="numeric" autocomplete="off">
+            <input class="input-line" placeholder="ALTO" inputmode="numeric" autocomplete="off">
+            <button class="btn-secondary" style="width:auto; padding:10px 14px;" type="button" onclick="this.parentElement.remove()">✕</button>
+        `;
+        $('#panelList').appendChild(row);
+    }
+
+    function calcLinear() {
+        const rows = $$('#linearList .piece-row');
+        const all = [];
+        rows.forEach(row => {
+            const inputs = row.querySelectorAll('input');
+            const l = parseFloat(inputs[0].value) || 0;
+            const q = parseInt(inputs[1].value) || 1;
+            for (let i=0; i<q; i++) if (l>0) all.push(l);
+        });
+        if (!all.length) return Toast.show('AGREGA AL MENOS UNA PIEZA');
+        all.sort((a,b) => b-a);
+        const bars = [];
+        all.forEach(l => {
+            let placed = false;
+            for (let bar of bars) {
+                if (bar.rem >= l) { bar.pieces.push(l); bar.rem -= l; placed = true; break; }
+            }
+            if (!placed) bars.push({ pieces: [l], rem: 6000 - l });
+        });
+        const eff = ((all.reduce((a,b)=>a+b,0) / (bars.length * 6000)) * 100).toFixed(1);
+        Toast.show(`${bars.length} BARRAS · ${eff}% APROVECHAMIENTO`);
+    }
+
+    function calcPanel() {
+        const rows = $$('#panelList .piece-row');
+        let area = 0, count = 0;
+        rows.forEach(row => {
+            const inputs = row.querySelectorAll('input');
+            const w = parseFloat(inputs[0].value) || 0;
+            const h = parseFloat(inputs[1].value) || 0;
+            if (w>0 && h>0) { area += w*h; count++; }
+        });
+        if (!count) return Toast.show('AGREGA AL MENOS UN PAÑO');
+        const plates = Math.ceil(area / (2600*1800*0.85));
+        Toast.show(`${plates} PLACAS ESTIMADAS`);
+    }
+
+    // ==================== PROYECTOS ====================
+    function renderProjects(filter = '') {
+        const data = [
+            { id:'078', title:'Ventanal Ruiz', status:'TALLER', bg:'var(--primary)' },
+            { id:'045', title:'Cocina Pérez', status:'INSTALAR', bg:'var(--text-mid)' },
+            { id:'102', title:'Cancel Baño Gómez', status:'PRESUPUESTO', bg:'var(--outline-variant)' },
+        ];
+        const list = data.filter(p => p.title.toLowerCase().includes(filter.toLowerCase()) || p.id.includes(filter));
+        $('#projectList').innerHTML = list.map(p => `
+            <button class="touch-card" type="button" style="flex-direction:row; justify-content:space-between; padding:18px; width:100%; text-align:left;">
+                <div><span class="card-title">#${p.id}</span><div style="font:var(--font-body-lg); text-transform:none;">${p.title}</div></div>
+                <span style="background:${p.bg}; color:white; padding:4px 12px; font:var(--font-label-sm);">${p.status}</span>
+            </button>
+        `).join('');
+    }
+
+    // ==================== EVENTOS ====================
+    function setupEvents() {
+        $$('[data-action]').forEach(el => {
+            el.addEventListener('click', () => {
+                const a = el.dataset.action;
+                if (a === 'budget') { resetBudget(); showScreen('budget'); }
+                else if (a === 'projects') { renderProjects(); showScreen('projects'); }
+                else if (a === 'cutter') showScreen('cutter');
+                else if (a === 'glass') showScreen('glass');
+            });
+        });
+
+        $$('.back-btn').forEach(b => b.addEventListener('click', () => showScreen('home')));
+
+        $$('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const t = item.dataset.tab;
+                if (t === 'home') showScreen('home');
+                else if (t === 'projects') { renderProjects(); showScreen('projects'); }
+                else if (t === 'tools') showScreen('cutter');
+                else if (t === 'profile') Toast.show('PERFIL DE CARLOS (DEMO)');
+            });
+        });
+
+        $$('.next-btn').forEach(b => b.addEventListener('click', nextBudget));
+
+        $$('#typeGrid .touch-card').forEach(c => {
+            c.addEventListener('click', () => {
+                $$('#typeGrid .touch-card').forEach(x => x.classList.remove('selected'));
+                c.classList.add('selected');
+                State.budgetType = c.dataset.type;
+                State.save();
+            });
+        });
+
+        $('#finishBudget').addEventListener('click', () => {
+            const client = $('#clientInput').value || 'Sin nombre';
+            const w = $('#widthInput').value || '?';
+            const h = $('#heightInput').value || '?';
+            Toast.show(`PRESUPUESTO ENVIADO · ${State.budgetType} ${w}x${h}mm`);
+            resetBudget();
+            showScreen('home');
+        });
+
+        $$('#cutTypeGrid .touch-card').forEach(c => {
+            c.addEventListener('click', () => selectCutType(c.dataset.type));
+        });
+
+        $('#addLinear').addEventListener('click', addLinearPiece);
+        $('#addPanel').addEventListener('click', addPanelPiece);
+        $('#calcLinear').addEventListener('click', calcLinear);
+        $('#calcPanel').addEventListener('click', calcPanel);
+
+        $('#projectSearch').addEventListener('input', e => renderProjects(e.target.value));
+
+        $('#helpBtn').addEventListener('click', () => Toast.show('TOCA LOS MÓDULOS PARA EMPEZAR'));
+
+        $('#glassConsult').addEventListener('click', () => Toast.show('CONSULTA ENVIADA (DEMO)'));
+
+        $$('#recentActivity .pill').forEach(p => {
+            p.addEventListener('click', () => { renderProjects(); showScreen('projects'); });
+        });
+
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+                e.preventDefault();
+                if (State.undo()) { renderScreen(); State.save(); Toast.show('DESHECHO'); }
+            }
+        });
+    }
+
+    // ==================== INICIO ====================
+    function init() {
+        State.load();
+        renderScreen();
+        if (State.screen === 'budget') renderBudgetSteps();
+        if (State.screen === 'projects') renderProjects();
+        if (State.screen === 'cutter' && State.cutType) selectCutType(State.cutType);
+        // Piezas de ejemplo
+        if (!$('#linearList').children.length) { addLinearPiece(); addLinearPiece(); }
+        if (!$('#panelList').children.length) { addPanelPiece(); addPanelPiece(); }
+        setupEvents();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>   <span class="card-title">CORTE</span>
                     </button>
                     <button class="touch-card" data-action="glass" type="button">
                         <span class="material-symbols-outlined" aria-hidden="true">blur_on</span>

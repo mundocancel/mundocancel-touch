@@ -1,0 +1,22 @@
+┌─────────────────────────────────────────────────┐
+│  index.html                                     │
+│  ┌───────────────────────────────────────────┐  │
+│  │  MUNDO.core.js (Núcleo)                   │  │
+│  │  - Registro de módulos                    │  │
+│  │  - Comando global (paleta de comandos)    │  │
+│  │  - Gestión de estado (StateManager)       │  │
+│  │  - Historial (TimeStack)                  │  │
+│  │  - Persistencia (localStorage)            │  │
+│  └───────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────┐  │
+│  │  MUNDO.modules.js (Módulos)               │  │
+│  │  - budget.js                              │  │
+│  │  - projects.js                            │  │
+│  │  - cutter.js                              │  │
+│  │  - glass.js                               │  │
+│  └───────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────┐  │
+│  │  MUNDO.ui.js (Renderizado)                │  │
+│  │  - Funciones puras para pintar pantallas  │  │
+│  └───────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>mundocancel · Touch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        :root {
+            --primary: #000000;
+            --on-primary: #FFFFFF;
+            --background: #F9F9F9;
+            --surface-lowest: #FFFFFF;
+            --surface-container: #EEEEEE;
+            --surface-container-high: #E2E2E2;
+            --surface-dim: #DADADA;
+            --text-high: #1B1B1B;
+            --text-mid: #5E5E5E;
+            --text-low: #8A8A8A;
+            --error: #BA1A1A;
+            --outline: #CFC4C5;
+            --outline-variant: #7E7576;
+            --font-display-lg: 700 3.5rem/1.1 'Space Grotesk', sans-serif;
+            --font-headline-md: 500 1.75rem/1.2 'Space Grotesk', sans-serif;
+            --font-body-lg: 400 1rem/1.6 'Space Grotesk', sans-serif;
+            --font-label-sm: 500 0.6875rem/1.0 'Space Grotesk', sans-serif;
+            letter-spacing: var(--label-spacing, 0.05em);
+            text-transform: uppercase;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #E5E5E5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .phone {
+            width: 100%;
+            max-width: 420px;
+            height: 800px;
+            background: var(--background);
+            border-radius: 0px;
+            box-shadow: 0 0 0 8px #1B1B1B, 0 30px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .statusbar {
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-area .material-symbols-outlined {
+            font-size: 32px;
+            font-variation-settings: 'FILL' 0, 'wght' 300;
+        }
+        .logo-text {
+            font: var(--font-headline-md);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-transform: none;
+        }
+        .help-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            cursor: pointer;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+        }
+        .main-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .section-label {
+            font: var(--font-label-sm);
+            color: var(--text-mid);
+            margin-bottom: 4px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--outline);
+            border: 1px solid var(--outline);
+        }
+        .touch-card {
+            background: var(--surface-lowest);
+            padding: 32px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border: none;
+            text-align: center;
+        }
+        .touch-card:active {
+            background: var(--surface-container-high);
+        }
+        .touch-card .material-symbols-outlined {
+            font-size: 48px;
+            font-variation-settings: 'FILL' 0, 'wght' 300;
+            color: var(--primary);
+        }
+        .touch-card .card-title {
+            font: var(--font-label-sm);
+            color: var(--text-high);
+            text-transform: uppercase;
+        }
+        .divider {
+            height: 1px;
+            background: var(--outline);
+            width: 100%;
+        }
+        .pill-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+        .pill {
+            background: var(--surface-lowest);
+            border: 1px solid var(--outline);
+            padding: 10px 16px;
+            font: var(--font-label-sm);
+            color: var(--text-high);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s;
+        }
+        .pill:active { background: var(--surface-container-high); }
+        .pill .material-symbols-outlined {
+            font-size: 18px;
+            vertical-align: middle;
+            margin-right: 4px;
+            font-variation-settings: 'FILL' 0, 'wght' 400;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            margin-right: 6px;
+        }
+        .bottom-nav {
+            display: flex;
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 12px 0 18px;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.15s;
+        }
+        .nav-item.active { opacity: 1; }
+        .nav-item .material-symbols-outlined {
+            font-size: 28px;
+            font-variation-settings: 'FILL' 0, 'wght' 300;
+        }
+        .module-screen {
+            background: var(--surface-lowest);
+            padding: 24px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border: 1px solid var(--outline);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            padding: 18px;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.15s;
+        }
+        .btn-primary:active { opacity: 0.85; }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 18px;
+            font: var(--font-label-sm);
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            width: 100%;
+        }
+        .input-line {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--outline-variant);
+            padding: 14px 4px;
+            font: var(--font-body-lg);
+            color: var(--text-high);
+            outline: none;
+            width: 100%;
+            transition: border-color 0.15s;
+        }
+        .input-line:focus {
+            border-bottom: 2px solid var(--primary);
+        }
+        .step-indicator {
+            display: flex;
+            gap: 6px;
+        }
+        .step-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--surface-dim);
+            transition: background 0.2s;
+        }
+        .step-bar.active { background: var(--primary); }
+        .hidden { display: none !important; }
+        .flex { display: flex; gap: 12px; align-items: center; }
+        .text-center { text-align: center; }
+        .uppercase { text-transform: uppercase; }
+    </style>
+</head>
+<body>
+<div class="phone">
+    <div class="statusbar">
+        <div class="logo-area">
+            <span class="material-symbols-outlined">deployed_code</span>
+            <span class="logo-text">mundocancel</span>
+        </div>
+        <div class="help-btn" id="helpBtn">AYUDA</div>
+    </div>
+
+    <div class="main-scroll" id="mainContent">
+        <!-- HOME -->
+        <div id="homeScreen">
+            <div class="section-label">OPERACIONES</div>
+            <div class="card-grid">
+                <div class="touch-card" data-action="budget">
+                    <span class="material-symbols-outlined">edit_square</span>
+                    <span class="card-title">PRESUPUESTO</span>
+                </div>
+                <div class="touch-card" data-action="projects">
+                    <span class="material-symbols-outlined">folder_open</span>
+                    <span class="card-title">PROYECTOS</span>
+                </div>
+                <div class="touch-card" data-action="cutter">
+                    <span class="material-symbols-outlined">content_cut</span>
+                    <span class="card-title">CORTE</span>
+                </div>
+                <div class="touch-card" data-action="glass">
+                    <span class="material-symbols-outlined">blur_on</span>
+                    <span class="card-title">CRISTAL</span>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="section-label">ACTIVIDAD RECIENTE</div>
+            <div class="pill-row">
+                <div class="pill"><span class="status-dot"></span> #078 LISTO</div>
+                <div class="pill"><span class="material-symbols-outlined">visibility</span> #045 VISTO</div>
+                <div class="pill"><span class="material-symbols-outlined">payments</span> PAGO</div>
+            </div>
+        </div>
+
+        <!-- PROYECTOS -->
+        <div id="projectsScreen" class="hidden">
+            <div class="module-screen">
+                <div class="section-label">PROYECTOS ACTIVOS</div>
+                <input class="input-line" placeholder="BUSCAR PROYECTO O CLIENTE">
+                <div class="touch-card" style="flex-direction:row; justify-content:space-between; padding:18px; text-align:left;">
+                    <div><span class="card-title">#078</span><br><span style="font:var(--font-body-lg); text-transform:none;">Ventanal Ruiz</span></div>
+                    <span class="pill" style="background:var(--primary); color:var(--on-primary);">TALLER</span>
+                </div>
+                <div class="touch-card" style="flex-direction:row; justify-content:space-between; padding:18px; text-align:left;">
+                    <div><span class="card-title">#045</span><br><span style="font:var(--font-body-lg); text-transform:none;">Cocina Pérez</span></div>
+                    <span class="pill">INSTALAR</span>
+                </div>
+                <button class="btn-primary back-btn">VOLVER</button>
+            </div>
+        </div>
+
+        <!-- PRESUPUESTO -->
+        <div id="budgetScreen" class="hidden">
+            <div class="module-screen">
+                <div class="section-label">NUEVO PRESUPUESTO</div>
+                <div class="step-indicator"><div class="step-bar active"></div><div class="step-bar"></div><div class="step-bar"></div></div>
+                <div id="budgetStep1">
+                    <div class="text-center" style="font:var(--font-headline-md);">CLIENTE</div>
+                    <input class="input-line" placeholder="NOMBRE O TELÉFONO" id="clientInput">
+                    <button class="btn-primary" onclick="nextBudget()">SIGUIENTE</button>
+                </div>
+                <div id="budgetStep2" class="hidden">
+                    <div class="text-center" style="font:var(--font-headline-md);">MEDIDAS</div>
+                    <div class="flex"><input class="input-line" placeholder="ANCHO (MM)" id="widthInput"><input class="input-line" placeholder="ALTO (MM)" id="heightInput"></div>
+                    <button class="btn-primary" onclick="nextBudget()">SIGUIENTE</button>
+                </div>
+                <div id="budgetStep3" class="hidden">
+                    <div class="text-center" style="font:var(--font-headline-md);">TIPO</div>
+                    <div class="card-grid">
+                        <div class="touch-card selected">VENTANA</div>
+                        <div class="touch-card">PUERTA</div>
+                    </div>
+                    <button class="btn-primary" style="background:#1B5E20;" onclick="finishBudget()">ENVIAR</button>
+                </div>
+                <button class="btn-secondary back-btn">CANCELAR</button>
+            </div>
+        </div>
+
+        <!-- CORTE -->
+        <div id="cutterScreen" class="hidden">
+            <div class="module-screen">
+                <div class="section-label">OPTIMIZADOR DE CORTE</div>
+                <div class="card-grid">
+                    <div class="touch-card" onclick="selectCut('linear')"><span class="material-symbols-outlined">horizontal_rule</span><span class="card-title">PERFIL</span></div>
+                    <div class="touch-card" onclick="selectCut('panel')"><span class="material-symbols-outlined">crop_square</span><span class="card-title">VIDRIO</span></div>
+                </div>
+                <div id="cutLinear" class="hidden">
+                    <div class="section-label">PIEZAS (MM)</div>
+                    <div id="linearList"></div>
+                    <button class="btn-secondary" onclick="addLinear()">+ AGREGAR</button>
+                    <button class="btn-primary" onclick="calcLinear()">CALCULAR</button>
+                </div>
+                <div id="cutPanel" class="hidden">
+                    <div class="section-label">PAÑOS</div>
+                    <div id="panelList"></div>
+                    <button class="btn-secondary" onclick="addPanel()">+ AGREGAR</button>
+                    <button class="btn-primary" onclick="calcPanel()">CALCULAR</button>
+                </div>
+                <button class="btn-secondary back-btn">VOLVER</button>
+            </div>
+        </div>
+
+        <!-- CRISTAL -->
+        <div id="glassScreen" class="hidden">
+            <div class="module-screen">
+                <div class="section-label">CRISTAL TEMPLADO</div>
+                <div class="card-grid">
+                    <div class="touch-card"><span class="material-symbols-outlined">shower</span><span class="card-title">MAMPARA</span></div>
+                    <div class="touch-card"><span class="material-symbols-outlined">door_open</span><span class="card-title">PUERTA</span></div>
+                </div>
+                <div class="flex">
+                    <select class="input-line"><option>8MM</option><option selected>10MM</option><option>12MM</option></select>
+                    <select class="input-line"><option>INCOLORO</option><option>BRONCE</option></select>
+                </div>
+                <div class="text-center" style="font:var(--font-headline-md);">DESDE $8,450</div>
+                <button class="btn-primary" style="background:#1B5E20;">CONSULTAR</button>
+                <button class="btn-secondary back-btn">VOLVER</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" data-tab="home"><span class="material-symbols-outlined">grid_view</span><span>INICIO</span></div>
+        <div class="nav-item" data-tab="projects"><span class="material-symbols-outlined">folder</span><span>PROYECTOS</span></div>
+        <div class="nav-item" data-tab="tools"><span class="material-symbols-outlined">construction</span><span>HERRAMIENTAS</span></div>
+        <div class="nav-item" data-tab="profile"><span class="material-symbols-outlined">person</span><span>PERFIL</span></div>
+    </div>
+</div>
+
+<script>
+    const State = { screen: 'home', budgetStep: 1, cutType: null };
+    const screens = {
+        home: document.getElementById('homeScreen'),
+        projects: document.getElementById('projectsScreen'),
+        budget: document.getElementById('budgetScreen'),
+        cutter: document.getElementById('cutterScreen'),
+        glass: document.getElementById('glassScreen')
+    };
+    function showScreen(id) {
+        Object.values(screens).forEach(s => s.classList.add('hidden'));
+        if (screens[id]) screens[id].classList.remove('hidden');
+        State.screen = id;
+        updateNav();
+    }
+    function updateNav() {
+        document.querySelectorAll('.nav-item').forEach(n => {
+            n.classList.remove('active');
+            if (n.dataset.tab === 'home' && State.screen === 'home') n.classList.add('active');
+            if (n.dataset.tab === 'projects' && State.screen === 'projects') n.classList.add('active');
+            if (n.dataset.tab === 'tools' && (State.screen === 'cutter' || State.screen === 'glass')) n.classList.add('active');
+        });
+    }
+    document.querySelectorAll('.touch-card[data-action]').forEach(card => {
+        card.addEventListener('click', () => {
+            const a = card.dataset.action;
+            if (a === 'budget') showScreen('budget');
+            else if (a === 'projects') showScreen('projects');
+            else if (a === 'cutter') showScreen('cutter');
+            else if (a === 'glass') showScreen('glass');
+        });
+    });
+    document.querySelectorAll('.back-btn').forEach(b => b.addEventListener('click', () => showScreen('home')));
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const t = item.dataset.tab;
+            if (t === 'home') showScreen('home');
+            else if (t === 'projects') showScreen('projects');
+            else if (t === 'tools') showScreen('cutter');
+            else if (t === 'profile') alert('PERFIL DE CARLOS');
+        });
+    });
+    window.nextBudget = function() {
+        State.budgetStep++;
+        document.querySelectorAll('#budgetScreen [id^="budgetStep"]').forEach(d => d.classList.add('hidden'));
+        document.getElementById('budgetStep'+State.budgetStep).classList.remove('hidden');
+        document.querySelectorAll('#budgetScreen .step-bar').forEach((b,i) => b.classList.toggle('active', i < State.budgetStep));
+    };
+    window.finishBudget = function() {
+        alert('PRESUPUESTO ENVIADO');
+        State.budgetStep = 1;
+        document.querySelectorAll('#budgetScreen [id^="budgetStep"]').forEach(d => d.classList.add('hidden'));
+        document.getElementById('budgetStep1').classList.remove('hidden');
+        document.querySelectorAll('#budgetScreen .step-bar').forEach((b,i) => b.classList.toggle('active', i === 0));
+        showScreen('home');
+    };
+    window.selectCut = function(t) {
+        State.cutType = t;
+        document.getElementById('cutLinear').classList.toggle('hidden', t !== 'linear');
+        document.getElementById('cutPanel').classList.toggle('hidden', t !== 'panel');
+    };
+    window.addLinear = function() {
+        const d = document.createElement('div'); d.className = 'flex';
+        d.innerHTML = '<input class="input-line" placeholder="MM"><input class="input-line" placeholder="CANT" style="width:80px;">';
+        document.getElementById('linearList').appendChild(d);
+    };
+    window.addPanel = function() {
+        const d = document.createElement('div'); d.className = 'flex';
+        d.innerHTML = '<input class="input-line" placeholder="ANCHO"><input class="input-line" placeholder="ALTO">';
+        document.getElementById('panelList').appendChild(d);
+    };
+    window.calcLinear = () => alert('92% APROVECHAMIENTO');
+    window.calcPanel = () => alert('3 PLACAS NECESARIAS');
+    document.getElementById('helpBtn').addEventListener('click', () => alert('TOCA LOS MÓDULOS PARA EMPEZAR'));
+    addLinear(); addLinear(); addPanel(); addPanel();
+</script>
+</body>
+</html>

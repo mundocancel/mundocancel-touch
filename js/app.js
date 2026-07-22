@@ -1,0 +1,1 @@
+/* mundocancel Touch — repo oficial normalizado */

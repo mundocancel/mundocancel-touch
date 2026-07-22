@@ -1,41 +1,20 @@
 # mundocancel Touch
 
-**Herramienta de gestión integral para carpintería de aluminio y cancelería.**
+Prototipo funcional de app móvil para gestión de carpintería de aluminio: presupuestos, proyectos, corte y cristal. Interfaz táctil, paso a paso, sin texto innecesario.
 
-Interfaz táctil minimalista diseñada para que cualquier persona —sin entrenamiento— pueda crear presupuestos, gestionar proyectos, optimizar cortes de material y cotizar cristal templado desde un dispositivo móvil.
+## Características
+- Navegación táctil inferior
+- Wizard de presupuesto en 3 pasos
+- Optimizador de corte por perfil / vidrio
+- Catálogo rápido de cristal templado
+- Diseño mobile-first, sin dependencias
 
----
+## Estructura
+- `index.html` punto de entrada
+- `css/style.css` estilos
+- `js/app.js` lógica
+- `data/` catálogo y reglas locales
+- `assets/` íconos/imágenes
 
-## 🧱 Sistema de Diseño
-
-Basado en el kit visual **ARCH.MONOLITH**: estética industrial, tipografía técnica, paleta monocromática y cuadrícula de fondo tipo plano arquitectónico.
-
-| Atributo | Valor |
-|----------|-------|
-| **Tipografía** | Space Grotesk (Google Fonts) |
-| **Iconografía** | Material Symbols (Google Fonts) |
-| **Paleta** | Negro puro, grises, blanco, rojo de error |
-| **Forma** | Bordes rectos, sin sombras decorativas |
-| **Tono** | Técnico, preciso, sin ornamentos |
-
----
-
-## 📱 Módulos
-
-| Módulo | Descripción |
-|--------|-------------|
-| **Presupuesto** | Wizard de 3 pasos: cliente → medidas → tipo. Envío simulado. |
-| **Proyectos** | Lista de proyectos activos con estado (taller, instalar). |
-| **Corte** | Optimizador de perfiles lineales y paneles de vidrio. |
-| **Cristal** | Configurador de cristal templado: espesor, acabado, precio estimado. |
-
----
-
-## 🚀 Despliegue
-
-### GitHub Pages
-
-1. Sube este repositorio a GitHub.
-2. Ve a **Settings > Pages**.
-3. Selecciona la rama `main` y la carpeta raíz.
-4. La herramienta estará disponible en:
+## Uso local
+Abrí `index.html` en tu navegador. Si usás `python3 -m http.server`, abrí `http://localhost:8000`.

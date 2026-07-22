@@ -3,427 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>mundocancel Touch · Scalable Core</title>
+    <title>mundocancel · Touch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-    <style>
-        /* Estilos base similares a la versión anterior (minimalista) */
-        :root {
-            --primary: #000000;
-            --on-primary: #FFFFFF;
-            --background: #F9F9F9;
-            --surface: #FFFFFF;
-            --outline: #CFC4C5;
-            --text-high: #1B1B1B;
-            --text-mid: #5E5E5E;
-            --error: #BA1A1A;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: #E5E5E5;
-            background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .phone {
-            width: 100%;
-            max-width: 420px;
-            height: 800px;
-            background: var(--background);
-            border-radius: 0;
-            box-shadow: 0 0 0 8px #1B1B1B, 0 30px 50px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .topbar {
-            background: var(--primary);
-            color: var(--on-primary);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-weight: 700;
-            font-size: 18px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: var(--outline);
-            border: 1px solid var(--outline);
-        }
-        .touch-card {
-            background: var(--surface);
-            padding: 28px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            border: none;
-            transition: background 0.15s;
-        }
-        .touch-card:active { background: #E2E2E2; }
-        .material-symbols-outlined { font-size: 42px; font-variation-settings: 'FILL' 0, 'wght' 300; }
-        .btn-primary {
-            background: var(--primary);
-            color: var(--on-primary);
-            border: none;
-            padding: 18px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            width: 100%;
-        }
-        .input-line {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid var(--outline);
-            padding: 14px 4px;
-            font-size: 18px;
-            outline: none;
-            width: 100%;
-        }
-        .hidden { display: none !important; }
-        .flex { display: flex; gap: 12px; align-items: center; }
-        .text-center { text-align: center; }
-        /* Paleta de comandos (terminal) */
-        .command-palette {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85%;
-            background: var(--primary);
-            color: white;
-            border: 2px solid var(--outline);
-            padding: 18px;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .command-palette input {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid white;
-            color: white;
-            font-size: 18px;
-            padding: 8px 0;
-            outline: none;
-        }
-        .command-list {
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 14px;
-            letter-spacing: 0.05em;
-        }
-        .command-list div { padding: 6px; cursor: pointer; }
-        .command-list div:hover { background: rgba(255,255,255,0.1); }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="phone" id="appRoot">
-    <!-- Barra superior con activación de paleta -->
-    <div class="topbar">
-        <span>mundocancel</span>
-        <span id="cmdTrigger" style="cursor:pointer;">⌨️ /</span>
-    </div>
+<div class="app">
+    <div class="phone">
+        <header class="statusbar">
+            <div class="logo-area">
+                <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
+                <span class="logo-text">mundocancel</span>
+            </div>
+            <button class="help-btn" id="helpBtn" type="button">AYUDA</button>
+        </header>
 
-    <!-- Contenido dinámico -->
-    <div class="main-content" id="mainContent">
-        <!-- Se renderiza según el estado -->
-    </div>
+        <main class="main-scroll" id="mainContent">
+            <section class="screen" id="homeScreen">
+                <div class="section-label">OPERACIONES</div>
+                <div class="card-grid">
+                    <button class="touch-card" data-action="budget" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">edit_square</span>
+                        <span class="card-title">PRESUPUESTO</span>
+                    </button>
+                    <button class="touch-card" data-action="projects" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">folder_open</span>
+                        <span class="card-title">PROYECTOS</span>
+                    </button>
+                    <button class="touch-card" data-action="cutter" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">content_cut</span>
+                        <span class="card-title">CORTE</span>
+                    </button>
+                    <button class="touch-card" data-action="glass" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">blur_on</span>
+                        <span class="card-title">CRISTAL</span>
+                    </button>
+                </div>
 
-    <!-- Paleta de comandos (inicialmente oculta) -->
-    <div id="commandPalette" class="command-palette hidden">
-        <input type="text" id="cmdInput" placeholder="Escribe un comando...">
-        <div class="command-list" id="cmdSuggestions"></div>
+                <div class="divider"></div>
+                <div class="section-label">ACTIVIDAD RECIENTE</div>
+                <div class="pill-row" id="recentActivity">
+                    <button class="pill" type="button"><span class="status-dot" aria-hidden="true"></span> #078 LISTO</button>
+                    <button class="pill" type="button"><span class="material-symbols-outlined" aria-hidden="true">visibility</span> #045 VISTO</button>
+                    <button class="pill" type="button"><span class="material-symbols-outlined" aria-hidden="true">payments</span> PAGO</button>
+                </div>
+            </section>
+
+            <section class="screen hidden" id="projectsScreen">
+                <div class="module-screen">
+                    <div class="section-label">PROYECTOS ACTIVOS</div>
+                    <input class="input-line" id="projectSearch" placeholder="BUSCAR PROYECTO O CLIENTE" autocomplete="off">
+                    <div id="projectList"></div>
+                    <button class="btn-secondary back-btn" type="button">VOLVER</button>
+                </div>
+            </section>
+
+            <section class="screen hidden" id="budgetScreen">
+                <div class="module-screen">
+                    <div class="section-label">NUEVO PRESUPUESTO</div>
+                    <div class="step-indicator" aria-label="Pasos">
+                        <div class="step-bar active" data-step="1"></div>
+                        <div class="step-bar" data-step="2"></div>
+                        <div class="step-bar" data-step="3"></div>
+                    </div>
+
+                    <div class="step-panel" id="budgetStep1">
+                        <div class="text-center step-title">CLIENTE</div>
+                        <label class="sr-only" for="clientInput">Cliente</label>
+                        <input class="input-line" id="clientInput" placeholder="NOMBRE O TELÉFONO" autocomplete="off">
+                        <button class="btn-primary next-btn" type="button" data-next="budgetStep2">SIGUIENTE</button>
+                    </div>
+
+                    <div class="step-panel hidden" id="budgetStep2">
+                        <div class="text-center step-title">MEDIDAS</div>
+                        <label class="sr-only" for="widthInput">Ancho mm</label>
+                        <input class="input-line" id="widthInput" placeholder="ANCHO (MM)" inputmode="numeric" autocomplete="off">
+                        <label class="sr-only" for="heightInput">Alto mm</label>
+                        <input class="input-line" id="heightInput" placeholder="ALTO (MM)" inputmode="numeric" autocomplete="off">
+                        <button class="btn-primary next-btn" type="button" data-next="budgetStep3">SIGUIENTE</button>
+                    </div>
+
+                    <div class="step-panel hidden" id="budgetStep3">
+                        <div class="text-center step-title">TIPO</div>
+                        <div class="card-grid" id="typeGrid">
+                            <button class="touch-card selected" type="button" data-type="Ventana">VENTANA</button>
+                            <button class="touch-card" type="button" data-type="Puerta">PUERTA</button>
+                            <button class="touch-card" type="button" data-type="Fijo">FIJO</button>
+                            <button class="touch-card" type="button" data-type="Corrediza">CORREDIZA</button>
+                        </div>
+                        <button class="btn-primary success-btn" id="finishBudget" type="button" style="background:#1B5E20;">ENVIAR</button>
+                    </div>
+
+                    <button class="btn-secondary back-btn" type="button">CANCELAR</button>
+                </div>
+            </section>
+
+            <section class="screen hidden" id="cutterScreen">
+                <div class="module-screen">
+                    <div class="section-label">OPTIMIZADOR DE CORTE</div>
+                    <div class="card-grid" id="cutTypeGrid">
+                        <button class="touch-card" type="button" data-type="linear">
+                            <span class="material-symbols-outlined" aria-hidden="true">horizontal_rule</span>
+                            <span class="card-title">PERFIL</span>
+                        </button>
+                        <button class="touch-card" type="button" data-type="panel">
+                            <span class="material-symbols-outlined" aria-hidden="true">crop_square</span>
+                            <span class="card-title">VIDRIO</span>
+                        </button>
+                    </div>
+
+                    <div id="cutLinear" class="hidden">
+                        <div class="section-label">PIEZAS (MM)</div>
+                        <div id="linearList" class="piece-list"></div>
+                        <button class="btn-secondary" id="addLinear" type="button">+ AGREGAR</button>
+                        <button class="btn-primary" id="calcLinear" type="button">CALCULAR</button>
+                    </div>
+
+                    <div id="cutPanel" class="hidden">
+                        <div class="section-label">PAÑOS (ANCHO x ALTO)</div>
+                        <div id="panelList" class="piece-list"></div>
+                        <button class="btn-secondary" id="addPanel" type="button">+ AGREGAR</button>
+                        <button class="btn-primary" id="calcPanel" type="button">CALCULAR</button>
+                    </div>
+
+                    <button class="btn-secondary back-btn" type="button">VOLVER</button>
+                </div>
+            </section>
+
+            <section class="screen hidden" id="glassScreen">
+                <div class="module-screen">
+                    <div class="section-label">CRISTAL TEMPLADO</div>
+                    <div class="card-grid" id="glassTypeGrid">
+                        <button class="touch-card" type="button">
+                            <span class="material-symbols-outlined" aria-hidden="true">shower</span>
+                            <span class="card-title">MAMPARA</span>
+                        </button>
+                        <button class="touch-card" type="button">
+                            <span class="material-symbols-outlined" aria-hidden="true">door_open</span>
+                            <span class="card-title">PUERTA</span>
+                        </button>
+                    </div>
+                    <div class="flex">
+                        <select class="input-line" aria-label="Espesor">
+                            <option>8MM</option>
+                            <option selected>10MM</option>
+                            <option>12MM</option>
+                        </select>
+                        <select class="input-line" aria-label="Acabado">
+                            <option>INCOLORO</option>
+                            <option>BRONCE</option>
+                        </select>
+                    </div>
+                    <div class="text-center price-pill">DESDE <strong>$8,450</strong></div>
+                    <button class="btn-primary success-btn" type="button" style="background:#1B5E20;">CONSULTAR / WHATSAPP</button>
+                    <button class="btn-secondary back-btn" type="button">VOLVER</button>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottom-nav" aria-label="Principal">
+            <button class="nav-item active" data-tab="home" type="button">
+                <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+                <span>INICIO</span>
+            </button>
+            <button class="nav-item" data-tab="projects" type="button">
+                <span class="material-symbols-outlined" aria-hidden="true">folder</span>
+                <span>PROYECTOS</span>
+            </button>
+            <button class="nav-item" data-tab="tools" type="button">
+                <span class="material-symbols-outlined" aria-hidden="true">construction</span>
+                <span>HERRAMIENTAS</span>
+            </button>
+            <button class="nav-item" data-tab="profile" type="button">
+                <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                <span>PERFIL</span>
+            </button>
+        </nav>
     </div>
 </div>
 
-<script>
-    // ========== MUNDO.core.js (Núcleo) ==========
-    const MundoCore = {
-        // Registro de módulos (skills)
-        registry: new Map(),
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-        // Estado global de la aplicación
-        state: {
-            screen: 'home',        // 'home', 'projects', 'budget', 'cutter', 'glass'
-            history: [],           // TimeStack para deshacer
-            currentIndex: -1,
-        },
-
-        // Inicializa el core
-        init() {
-            this.loadState();
-            this.registerModules();
-            this.render();
-            this.setupCommandPalette();
-            this.setupGlobalListeners();
-        },
-
-        // Registra todos los módulos disponibles
-        registerModules() {
-            this.register('home', {
-                icon: 'grid_view',
-                label: 'INICIO',
-                action: () => this.navigate('home')
-            });
-            this.register('projects', {
-                icon: 'folder_open',
-                label: 'PROYECTOS',
-                action: () => this.navigate('projects')
-            });
-            this.register('budget', {
-                icon: 'edit_square',
-                label: 'PRESUPUESTO',
-                action: () => this.navigate('budget')
-            });
-            this.register('cutter', {
-                icon: 'content_cut',
-                label: 'CORTE',
-                action: () => this.navigate('cutter')
-            });
-            this.register('glass', {
-                icon: 'blur_on',
-                label: 'CRISTAL',
-                action: () => this.navigate('glass')
-            });
-            // Comandos auxiliares
-            this.register('help', {
-                icon: 'help',
-                label: 'AYUDA',
-                action: () => alert('Comandos: home, projects, budget, cutter, glass')
-            });
-        },
-
-        // Registra un comando
-        register(name, config) {
-            this.registry.set(name, config);
-        },
-
-        // Cambia la pantalla actual y guarda en historial
-        navigate(screen) {
-            this.saveHistory();
-            this.state.screen = screen;
-            this.render();
-            this.saveState();
-        },
-
-        // Guarda el estado actual en el historial (TimeStack)
-        saveHistory() {
-            this.state.history = this.state.history.slice(0, this.state.currentIndex + 1);
-            this.state.history.push({ ...this.state });
-            this.state.currentIndex = this.state.history.length - 1;
-        },
-
-        // Deshacer (volver a la pantalla anterior)
-        undo() {
-            if (this.state.currentIndex > 0) {
-                this.state.currentIndex--;
-                this.state = { ...this.state.history[this.state.currentIndex] };
-                this.render();
-                this.saveState();
-            }
-        },
-
-        // Persistencia en localStorage
-        saveState() {
-            localStorage.setItem('mundocancel_state', JSON.stringify(this.state));
-        },
-
-        loadState() {
-            const saved = localStorage.getItem('mundocancel_state');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    this.state = parsed;
-                    // Reiniciar historial al cargar para evitar problemas
-                    this.state.history = [parsed];
-                    this.state.currentIndex = 0;
-                } catch(e) {}
-            }
-        },
-
-        // Configura la paleta de comandos (estilo terminal)
-        setupCommandPalette() {
-            const palette = document.getElementById('commandPalette');
-            const input = document.getElementById('cmdInput');
-            const trigger = document.getElementById('cmdTrigger');
-            const suggestions = document.getElementById('cmdSuggestions');
-
-            trigger.addEventListener('click', () => {
-                palette.classList.toggle('hidden');
-                if (!palette.classList.contains('hidden')) input.focus();
-            });
-
-            input.addEventListener('input', () => {
-                const filter = input.value.toLowerCase();
-                const matches = [];
-                for (let [name, config] of this.registry) {
-                    if (name.includes(filter) || config.label.toLowerCase().includes(filter)) {
-                        matches.push({ name, ...config });
-                    }
-                }
-                suggestions.innerHTML = matches.map(m => 
-                    `<div onclick="MundoCore.executeCommand('${m.name}')">${m.label} (${m.name})</div>`
-                ).join('');
-            });
-
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const cmd = input.value.trim();
-                    if (cmd) this.executeCommand(cmd);
-                    palette.classList.add('hidden');
-                    input.value = '';
-                } else if (e.key === 'Escape') {
-                    palette.classList.add('hidden');
-                }
-            });
-        },
-
-        // Ejecuta un comando por nombre
-        executeCommand(name) {
-            const cmd = this.registry.get(name);
-            if (cmd) {
-                cmd.action();
-            }
-        },
-
-        // Escucha global para teclas (deshacer con Ctrl+Z, etc.)
-        setupGlobalListeners() {
-            document.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-                    e.preventDefault();
-                    this.undo();
-                }
-                if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement === document.body) {
-                    e.preventDefault();
-                    document.getElementById('commandPalette').classList.remove('hidden');
-                    document.getElementById('cmdInput').focus();
-                }
-            });
-        },
-
-        // Renderiza la pantalla actual
-        render() {
-            const container = document.getElementById('mainContent');
-            // Limpiar
-            container.innerHTML = '';
-            // Crear contenido según pantalla
-            switch(this.state.screen) {
-                case 'home':
-                    container.innerHTML = this.renderHome();
-                    break;
-                case 'projects':
-                    container.innerHTML = this.renderProjects();
-                    break;
-                case 'budget':
-                    container.innerHTML = this.renderBudget();
-                    break;
-                case 'cutter':
-                    container.innerHTML = this.renderCutter();
-                    break;
-                case 'glass':
-                    container.innerHTML = this.renderGlass();
-                    break;
-                default:
-                    container.innerHTML = '<p>Pantalla no encontrada</p>';
-            }
-        },
-
-        // Funciones de renderizado (extraídas a MUNDO.ui.js idealmente)
-        renderHome() {
-            return `
-                <div class="text-center" style="font-weight:700; letter-spacing:0.08em;">OPERACIONES</div>
-                <div class="card-grid">
-                    <div class="touch-card" onclick="MundoCore.navigate('budget')">
-                        <span class="material-symbols-outlined">edit_square</span>
-                        <span>PRESUPUESTO</span>
-                    </div>
-                    <div class="touch-card" onclick="MundoCore.navigate('projects')">
-                        <span class="material-symbols-outlined">folder_open</span>
-                        <span>PROYECTOS</span>
-                    </div>
-                    <div class="touch-card" onclick="MundoCore.navigate('cutter')">
-                        <span class="material-symbols-outlined">content_cut</span>
-                        <span>CORTE</span>
-                    </div>
-                    <div class="touch-card" onclick="MundoCore.navigate('glass')">
-                        <span class="material-symbols-outlined">blur_on</span>
-                        <span>CRISTAL</span>
-                    </div>
-                </div>
-            `;
-        },
-
-        renderProjects() {
-            return `
-                <div style="font-weight:700; letter-spacing:0.08em;">PROYECTOS</div>
-                <input class="input-line" placeholder="BUSCAR...">
-                <div class="touch-card" style="flex-direction:row; justify-content:space-between; padding:16px;">
-                    <span>#078 Ventanal Ruiz</span>
-                    <span style="background:black; color:white; padding:4px 12px;">TALLER</span>
-                </div>
-                <button class="btn-primary" onclick="MundoCore.navigate('home')">VOLVER</button>
-            `;
-        },
-
-        renderBudget() {
-            return `
-                <div style="font-weight:700; letter-spacing:0.08em;">NUEVO PRESUPUESTO</div>
-                <input class="input-line" placeholder="NOMBRE DEL CLIENTE">
-                <div class="flex"><input class="input-line" placeholder="ANCHO (mm)"><input class="input-line" placeholder="ALTO (mm)"></div>
-                <button class="btn-primary" onclick="MundoCore.navigate('home')">GUARDAR Y VOLVER</button>
-            `;
-        },
-
-        renderCutter() {
-            return `
-                <div style="font-weight:700; letter-spacing:0.08em;">OPTIMIZADOR</div>
-                <div class="card-grid">
-                    <div class="touch-card"><span class="material-symbols-outlined">horizontal_rule</span>PERFIL</div>
-                    <div class="touch-card"><span class="material-symbols-outlined">crop_square</span>VIDRIO</div>
-                </div>
-                <button class="btn-primary" onclick="MundoCore.navigate('home')">VOLVER</button>
-            `;
-        },
-
-        renderGlass() {
-            return `
-                <div style="font-weight:700; letter-spacing:0.08em;">CRISTAL TEMPLADO</div>
-                <select class="input-line"><option>10MM</option><option>12MM</option></select>
-                <button class="btn-primary" onclick="MundoCore.navigate('home')">COTIZAR</button>
-            `;
-        }
-    };
-
-    // Arranque
-    document.addEventListener('DOMContentLoaded', () => {
-        MundoCore.init();
-    });
-</script>
+<script src="js/app.js"></script>
 </body>
 </html>

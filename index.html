@@ -1,648 +1,156 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AlumiFlow · Carpintería de Aluminio</title>
-    <!-- Fuentes e iconos -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #E5E9F0;  /* fondo gris claro exterior */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 16px 0 32px;
-        }
-
-        /* Contenedor tipo smartphone */
-        .phone-frame {
-            max-width: 390px;
-            width: 100%;
-            background: #F8FAFC;
-            border-radius: 36px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            padding: 20px 16px 28px;
-            border: 1px solid rgba(255,255,255,0.5);
-            position: relative;
-        }
-
-        /* Barra de estado simulada */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #1E293B;
-        }
-
-        /* Dashboard header */
-        .app-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .greeting h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0F172A;
-        }
-        .greeting p {
-            font-size: 14px;
-            color: #64748B;
-            margin-top: 2px;
-        }
-        .profile-badge {
-            width: 48px;
-            height: 48px;
-            background: #F97316;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 20px;
-            box-shadow: 0 6px 10px rgba(249, 115, 22, 0.2);
-        }
-
-        /* Buscador universal */
-        .search-box {
-            background: white;
-            border-radius: 30px;
-            padding: 12px 18px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px -2px rgba(0,0,0,0.03);
-            border: 1px solid #E2E8F0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #64748B;
-        }
-        .search-box i {
-            font-size: 18px;
-        }
-        .search-box input {
-            border: none;
-            background: transparent;
-            flex:1;
-            font-size: 16px;
-            outline: none;
-            font-weight: 400;
-        }
-        .search-box input::placeholder {
-            color: #94A3B8;
-        }
-
-        /* Grid de acciones rápidas */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 28px;
-        }
-        .action-card {
-            background: white;
-            border-radius: 20px;
-            padding: 16px 10px;
-            box-shadow: 0 8px 15px -6px rgba(0,0,0,0.05);
-            border: 1px solid #EDF2F7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: all 0.15s;
-            cursor: pointer;
-        }
-        .action-card i {
-            font-size: 28px;
-            color: #F97316;
-            margin-bottom: 10px;
-            background: #FFF7ED;
-            padding: 10px;
-            border-radius: 18px;
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .action-card span {
-            font-weight: 600;
-            font-size: 15px;
-            color: #1E293B;
-        }
-        .action-card small {
-            font-size: 12px;
-            color: #64748B;
-            margin-top: 4px;
-        }
-
-        /* Feed actividad */
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 14px;
-        }
-        .section-title h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #0F172A;
-        }
-        .section-title a {
-            font-size: 14px;
-            color: #F97316;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .activity-feed {
-            background: white;
-            border-radius: 24px;
-            padding: 6px 6px;
-            box-shadow: 0 6px 12px -6px rgba(0,0,0,0.05);
-            border: 1px solid #EDF2F7;
-            margin-bottom: 24px;
-        }
-        .feed-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 12px;
-            border-bottom: 1px solid #F1F5F9;
-        }
-        .feed-item:last-child {
-            border-bottom: none;
-        }
-        .feed-icon {
-            width: 40px;
-            height: 40px;
-            background: #F1F5F9;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #334155;
-        }
-        .feed-content p {
-            font-weight: 500;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        .feed-time {
-            font-size: 12px;
-            color: #64748B;
-        }
-
-        /* Stepper (progreso proyecto) */
-        .stepper-card {
-            background: white;
-            border-radius: 24px;
-            padding: 18px 16px;
-            margin-bottom: 24px;
-            border: 1px solid #EDF2F7;
-        }
-        .stepper-title {
-            font-weight: 600;
-            margin-bottom: 14px;
-        }
-        .steps {
-            display: flex;
-            justify-content: space-between;
-        }
-        .step {
-            text-align: center;
-            flex:1;
-            font-size: 12px;
-            color: #94A3B8;
-            position: relative;
-        }
-        .step.active {
-            color: #F97316;
-            font-weight: 600;
-        }
-        .step .dot {
-            width: 12px;
-            height: 12px;
-            background: #CBD5E1;
-            border-radius: 10px;
-            margin: 8px auto 6px;
-        }
-        .step.active .dot {
-            background: #F97316;
-            box-shadow: 0 0 0 3px rgba(249,115,22,0.2);
-        }
-        .step.completed .dot {
-            background: #22C55E;
-        }
-
-        /* Módulos desplegables (presupuesto / taller / cobros) */
-        .module {
-            background: white;
-            border-radius: 24px;
-            padding: 18px 16px;
-            margin-bottom: 24px;
-            border: 1px solid #EDF2F7;
-            box-shadow: 0 8px 15px -8px rgba(0,0,0,0.05);
-        }
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .module-header i {
-            font-size: 24px;
-            color: #F97316;
-            background: #FFF7ED;
-            padding: 10px;
-            border-radius: 16px;
-        }
-        .module-header h4 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .btn {
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 40px;
-            padding: 12px 16px;
-            font-weight: 600;
-            font-size: 15px;
-            color: #1E293B;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.1s;
-            width: 100%;
-        }
-        .btn-primary {
-            background: #F97316;
-            border-color: #F97316;
-            color: white;
-            box-shadow: 0 8px 14px -6px rgba(249,115,22,0.3);
-        }
-        .btn-outline {
-            background: white;
-        }
-
-        .kanban-cols {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .kanban-col {
-            flex: 1;
-            background: #F8FAFC;
-            border-radius: 18px;
-            padding: 10px 6px;
-        }
-        .col-title {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 10px;
-            color: #334155;
-        }
-        .task-tag {
-            background: white;
-            padding: 8px 6px;
-            border-radius: 14px;
-            margin-bottom: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            border-left: 4px solid #F97316;
-        }
-
-        .install-card, .payment-card, .service-card {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-top: 14px;
-        }
-        .badge {
-            background: #FEF3C7;
-            color: #B45309;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        /* Toast de explicación */
-        .explain-toast {
-            background: #1E293B;
-            color: white;
-            padding: 14px 18px;
-            border-radius: 60px;
-            font-size: 14px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .explain-toast.show {
-            opacity: 1;
-        }
-        .explain-toast i {
-            color: #F97316;
-            font-size: 20px;
-        }
-
-        .fab-help {
-            position: sticky;
-            bottom: 10px;
-            float: right;
-            background: #1E293B;
-            color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            cursor: pointer;
-            margin-top: 8px;
-            border: 2px solid white;
-        }
-
-        /* Utilidades */
-        .mt-2 { margin-top: 12px; }
-        .mb-2 { margin-bottom: 12px; }
-        .text-center { text-align: center; }
-        .w-100 { width: 100%; }
-        .flex { display: flex; gap: 8px; align-items: center; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MundoCanceles · ALUCALC 3D · Despiece Técnico</title>
+<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<div class="phone-frame">
-    <!-- Status -->
-    <div class="status-bar">
-        <span>9:41</span>
-        <span><i class="fas fa-signal"></i>  <i class="fas fa-wifi"></i>  <i class="fas fa-battery-full"></i></span>
-    </div>
 
-    <!-- Header principal -->
-    <div class="app-header">
-        <div class="greeting">
-            <h2>¡Hola, Carlos!</h2>
-            <p>Alumitaller · Viernes 17 Abr</p>
-        </div>
-        <div class="profile-badge">CA</div>
+<header>
+  <div class="brand">
+    <div class="brand-logo">M</div>
+    <div class="brand-text">
+      <span class="brand-title">MundoCanceles</span>
+      <span class="brand-sub">ALUCALC · DESPIECE TÉCNICO</span>
     </div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="explodeBtn" title="Vista de despiece">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="btn-label">Despiece</span>
+    </button>
+    <button class="icon-btn" id="labelsBtn" title="Mostrar etiquetas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      <span class="btn-label">Etiquetas</span>
+    </button>
+    <button class="icon-btn active" id="dimsBtn" title="Acotaciones">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 3H3v18h18V3z"/><path d="M9 3v18M3 9h18"/></svg>
+      <span class="btn-label">Acotar</span>
+    </button>
+    <button class="icon-btn" id="resetBtn" title="Resetear vista">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      <span class="btn-label">Reset</span>
+    </button>
+    <button class="icon-btn" id="themeBtn" title="Cambiar tema">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <span class="btn-label">Tema</span>
+    </button>
+  </div>
+</header>
 
-    <!-- Buscador universal -->
-    <div class="search-box" onclick="showExplanation('Búsqueda contextual: cliente, proyecto o dirección. Escribe para encontrar rápido.')">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="Buscar proyecto o cliente...">
+<aside>
+  <div class="section">
+    <div class="section-title">Tipo de Cancel</div>
+    <div class="type-grid" id="typeGrid">
+      <button class="type-btn active" data-type="fijo">Fijo</button>
+      <button class="type-btn" data-type="1hoja">1 Hoja</button>
+      <button class="type-btn" data-type="2hojas">2 Hojas</button>
+      <button class="type-btn" data-type="3hojas">3 Hojas</button>
+      <button class="type-btn" data-type="4hojas">4 Hojas</button>
+      <button class="type-btn" data-type="corrediza">Corrediza</button>
     </div>
+  </div>
 
-    <!-- Acciones rápidas -->
-    <div class="quick-actions">
-        <div class="action-card" onclick="showExplanation('➕ Nuevo Presupuesto: Inicia cotización guiada con medición por cámara o manual.')">
-            <i class="fas fa-calculator"></i>
-            <span>Nuevo Presupuesto</span>
-            <small>Crear cotización</small>
-        </div>
-        <div class="action-card" onclick="showExplanation('📸 Medir en Obra: Usa la cámara y AR para tomar dimensiones directamente.')">
-            <i class="fas fa-camera-retro"></i>
-            <span>Medir en Obra</span>
-            <small>AR + foto</small>
-        </div>
-        <div class="action-card" onclick="showExplanation('📋 Agenda: Próximas instalaciones y visitas técnicas.')">
-            <i class="fas fa-calendar-check"></i>
-            <span>Agenda</span>
-            <small>Instalaciones</small>
-        </div>
-        <div class="action-card" onclick="showExplanation('💰 Cobrar Pendiente: Lista de saldos por liquidar, enviar recordatorio WhatsApp.')">
-            <i class="fas fa-hand-holding-usd"></i>
-            <span>Cobrar Pendiente</span>
-            <small>4 pendientes</small>
-        </div>
+  <div class="section">
+    <div class="section-title">Dimensiones</div>
+    <div class="control-row">
+      <div class="control-label"><span>Ancho</span><span class="control-value" id="widthVal">120 cm</span></div>
+      <input type="range" id="widthSlider" min="60" max="240" value="120" step="5" />
     </div>
+    <div class="control-row">
+      <div class="control-label"><span>Alto</span><span class="control-value" id="heightVal">140 cm</span></div>
+      <input type="range" id="heightSlider" min="60" max="240" value="140" step="5" />
+    </div>
+    <div class="control-row">
+      <div class="control-label"><span>Vidrio</span><span class="control-value" id="glassVal">6 mm</span></div>
+      <input type="range" id="glassSlider" min="3" max="12" value="6" step="1" />
+    </div>
+  </div>
 
-    <!-- Feed de actividad -->
-    <div class="section-title">
-        <h3>Actividad reciente</h3>
-        <a href="#" onclick="showExplanation('Ver todas las notificaciones: cambios de estado, pagos, aprobaciones.')">Ver todo</a>
+  <div class="section">
+    <div class="section-title">Color del Perfil</div>
+    <div class="color-grid" id="colorGrid">
+      <div class="color-swatch active" data-color="#E8E8E8" style="background:#E8E8E8" title="Blanco"></div>
+      <div class="color-swatch" data-color="#1a1a1a" style="background:#1a1a1a" title="Negro"></div>
+      <div class="color-swatch" data-color="#B8BCC2" style="background:#B8BCC2" title="Plata"></div>
+      <div class="color-swatch" data-color="#5C4033" style="background:#5C4033" title="Bronce"></div>
+      <div class="color-swatch" data-color="#2F4F4F" style="background:#2F4F4F" title="Verde"></div>
+      <div class="color-swatch" data-color="#C9A961" style="background:linear-gradient(135deg,#C9A961,#8B6914)" title="Dorado"></div>
+      <div class="color-swatch" data-color="#8B0000" style="background:#8B0000" title="Rojo"></div>
+      <div class="color-swatch" data-color="#1E3A5F" style="background:#1E3A5F" title="Azul"></div>
+      <div class="color-swatch" data-color="#6B4423" style="background:linear-gradient(135deg,#8B5A2B,#4A2E17)" title="Madera"></div>
+      <div class="color-swatch" data-color="#4A5568" style="background:#4A5568" title="Grafito"></div>
     </div>
-    <div class="activity-feed">
-        <div class="feed-item" onclick="showExplanation('Proyecto listo para instalar. Puedes asignar equipo y fecha.')">
-            <div class="feed-icon"><i class="fas fa-check-circle" style="color:#22C55E;"></i></div>
-            <div class="feed-content">
-                <p>🔔 Ventana Cocina Pérez lista para instalar</p>
-                <span class="feed-time">hace 25 min</span>
-            </div>
-        </div>
-        <div class="feed-item" onclick="showExplanation('El cliente abrió el presupuesto. Puedes hacer seguimiento.')">
-            <div class="feed-icon"><i class="far fa-eye"></i></div>
-            <div class="feed-content">
-                <p>👀 Presupuesto #045 visto por cliente</p>
-                <span class="feed-time">hace 2 horas</span>
-            </div>
-        </div>
-        <div class="feed-item" onclick="showExplanation('Pago registrado automáticamente.')">
-            <div class="feed-icon"><i class="fas fa-dollar-sign"></i></div>
-            <div class="feed-content">
-                <p>✅ Pago recibido: Puerta Balcón Gómez</p>
-                <span class="feed-time">ayer</span>
-            </div>
-        </div>
-    </div>
+  </div>
 
-    <!-- Stepper / Progreso proyecto destacado -->
-    <div class="stepper-card" onclick="showExplanation('Indicador de fase del proyecto. Toca para ver detalles.')">
-        <div class="stepper-title">Proyecto activo: #078 · Ventanal Sr. Ruiz</div>
-        <div class="steps">
-            <div class="step completed"><div class="dot"></div>Presup.</div>
-            <div class="step completed"><div class="dot"></div>Aprobado</div>
-            <div class="step active"><div class="dot"></div>Taller</div>
-            <div class="step"><div class="dot"></div>Instalar</div>
-            <div class="step"><div class="dot"></div>Pagado</div>
-        </div>
-    </div>
+  <div class="section">
+    <div class="section-title">Lista de Componentes</div>
+    <div class="component-list" id="componentList"></div>
+  </div>
 
-    <!-- MÓDULO 1: Presupuesto Rápido (simulado) -->
-    <div class="module">
-        <div class="module-header">
-            <i class="fas fa-file-invoice-dollar"></i>
-            <h4>Cotización express</h4>
-        </div>
-        <p style="margin-bottom: 16px; font-size: 14px; color:#334155;">Cliente: <strong>Ana Martínez</strong> · Tel: 555 123 4567</p>
-        <div class="flex" style="justify-content: space-between;">
-            <span class="badge"><i class="far fa-window-maximize"></i> Ventana Corredera 2 hojas</span>
-            <span class="badge">Serie 42 RPT</span>
-        </div>
-        <div style="margin: 16px 0; background: #F1F5F9; border-radius: 20px; padding: 12px; text-align: center;">
-            <i class="fas fa-arrows-alt-h" style="margin-right: 20px;"></i> 1800 mm 
-            <i class="fas fa-arrows-alt-v" style="margin-left: 30px; margin-right: 20px;"></i> 1200 mm
-        </div>
-        <div class="flex" style="justify-content: space-around;">
-            <div onclick="showExplanation('Vidrio doble 6mm incluido en el cálculo.')"><i class="far fa-square"></i> Vidrio 6mm</div>
-            <div onclick="showExplanation('Mosquitero opcional.')"><i class="fas fa-check-square" style="color:#F97316;"></i> Mosquitero</div>
-        </div>
-        <div class="flex mt-2">
-            <button class="btn btn-outline" style="flex:2;" onclick="showExplanation('Guardar borrador en la nube para continuar después.')"><i class="far fa-save"></i> Borrador</button>
-            <button class="btn btn-primary" style="flex:3;" onclick="showExplanation('Genera PDF profesional y lo envía por WhatsApp al cliente.')"><i class="fab fa-whatsapp"></i> Enviar presupuesto</button>
-        </div>
+  <div class="section">
+    <div class="section-title">Especificaciones</div>
+    <div class="info-table">
+      <div class="info-row"><span>Área total</span><span id="infoArea">1.68 m²</span></div>
+      <div class="info-row"><span>Perímetro</span><span id="infoPerim">5.20 m</span></div>
+      <div class="info-row"><span>Peso estimado</span><span id="infoWeight">28.4 kg</span></div>
+      <div class="info-row"><span>Tipo</span><span id="infoType">Fijo</span></div>
+      <div class="info-row"><span>Perfil</span><span id="infoProfile">Aluminio 6063-T5</span></div>
     </div>
+  </div>
+</aside>
 
-    <!-- MÓDULO 2: Producción Kanban (taller) -->
-    <div class="module">
-        <div class="module-header">
-            <i class="fas fa-industry"></i>
-            <h4>Tablero de taller</h4>
-        </div>
-        <div class="kanban-cols">
-            <div class="kanban-col">
-                <div class="col-title">🔴 Pend. Corte</div>
-                <div class="task-tag" onclick="showExplanation('Cortar perfiles según optimización. Toca para ver lista de corte.')">#081 · 2 ventanas</div>
-                <div class="task-tag" onclick="showExplanation('Pedido urgente.')">#092 · Puerta</div>
-            </div>
-            <div class="kanban-col">
-                <div class="col-title">🟡 Ensamble</div>
-                <div class="task-tag" onclick="showExplanation('En proceso de armado.')">#078 · Mampara</div>
-            </div>
-            <div class="kanban-col">
-                <div class="col-title">🟢 Listo instalar</div>
-                <div class="task-tag" onclick="showExplanation('Listo para cargar. Programar instalación.')">#045 · Cocina</div>
-            </div>
-        </div>
-        <button class="btn mt-2" onclick="showExplanation('Imprimir etiquetas QR para las piezas cortadas.')"><i class="fas fa-qrcode"></i> Imprimir etiquetas de corte</button>
-    </div>
+<div class="viewport" id="viewport">
+  <canvas id="canvas3d" tabindex="0" role="img" aria-label="Visor 3D de cancel MundoCanceles"></canvas>
+  <svg id="overlaySvg"></svg>
 
-    <!-- MÓDULO 3: Instalación / Obra -->
-    <div class="module">
-        <div class="module-header">
-            <i class="fas fa-truck"></i>
-            <h4>Instalación hoy</h4>
-        </div>
-        <div class="install-card" onclick="showExplanation('Ver checklist del instalador, fotos antes/después, firma digital.')">
-            <i class="fas fa-home" style="font-size: 32px; color:#F97316;"></i>
-            <div style="flex:1">
-                <strong>Residencial Los Pinos #12</strong>
-                <div style="font-size:13px; color:#475569;">Cliente: Sra. Gómez · 10:30 AM</div>
-            </div>
-            <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="flex mt-2">
-            <button class="btn" onclick="showExplanation('Tomar foto del hueco antes de instalar.')"><i class="fas fa-camera"></i> Foto ANTES</button>
-            <button class="btn btn-primary" onclick="showExplanation('Finalizar instalación: pedir firma al cliente.')"><i class="fas fa-pen"></i> Firmar y finalizar</button>
-        </div>
-        <div style="margin-top: 12px;">
-            <button class="btn w-100" style="background:#FEF2F2; color:#B91C1C; border-color:#FECACA;" onclick="showExplanation('Reportar incidencia: vidrio roto, falta material. Notifica al taller.')"><i class="fas fa-exclamation-triangle"></i> Reportar incidencia en obra</button>
-        </div>
-    </div>
+  <div class="view-controls">
+    <button class="view-btn active" data-view="3d" title="Vista 3D">3D</button>
+    <button class="view-btn" data-view="front" title="Vista Frontal">F</button>
+    <button class="view-btn" data-view="side" title="Vista Lateral">L</button>
+    <button class="view-btn" data-view="top" title="Vista Superior">S</button>
+  </div>
 
-    <!-- MÓDULO 4: Liquidación / Cobros -->
-    <div class="module">
-        <div class="module-header">
-            <i class="fas fa-wallet"></i>
-            <h4>Saldos pendientes</h4>
-        </div>
-        <div class="payment-card" onclick="showExplanation('Cliente López: saldo por pagar. Toca para registrar pago.')">
-            <div style="background:#FEF3C7; border-radius: 20px; padding: 6px 12px;">40% pend.</div>
-            <div style="flex:1"><strong>Proyecto López</strong><br><span style="font-size:14px;">Total $12,000 · Saldo $5,000</span></div>
-            <button class="btn btn-outline" style="width:auto; padding:8px 14px;" onclick="showExplanation('Abrir chat de WhatsApp con mensaje predefinido para recordar pago.')"><i class="fab fa-whatsapp"></i> Recordar</button>
-        </div>
-        <div class="flex mt-2">
-            <button class="btn btn-primary w-100" onclick="showExplanation('Registrar pago final y mover proyecto a histórico liquidado.')"><i class="fas fa-check-circle"></i> Registrar pago completo</button>
-        </div>
-    </div>
+  <div class="mode-indicator" id="modeIndicator">
+    <span id="modeText">Vista 3D</span>
+    <span class="badge" id="modeBadge">PBR</span>
+  </div>
 
-    <!-- MÓDULO 5: Seguimiento Postventa -->
-    <div class="module">
-        <div class="module-header">
-            <i class="fas fa-hand-holding-heart"></i>
-            <h4>Seguimiento Postventa</h4>
-        </div>
-        <div class="service-card" onclick="showExplanation('Recordatorio automático: Revisar herrajes a los 3 meses.')">
-            <i class="fas fa-bell" style="color:#F97316;"></i>
-            <div><strong>Mantenimiento sugerido</strong><br>Cliente Pérez · instalado hace 3 meses</div>
-        </div>
-        <div class="service-card" onclick="showExplanation('Garantía activa. Agendar visita técnica.')">
-            <i class="fas fa-shield-alt"></i>
-            <div><strong>Garantía vigente</strong><br>Ventanal Ruiz · vence en 18 meses</div>
-        </div>
-        <button class="btn mt-2" onclick="showExplanation('Programar visita de ajuste o revisión.')"><i class="fas fa-calendar-plus"></i> Agendar visita técnica</button>
-    </div>
+  <div class="dimension-label" id="labelWidth" style="display:none;">
+    <span class="value" id="labelWidthVal">120</span><span class="unit">cm</span>
+  </div>
+  <div class="dimension-label" id="labelHeight" style="display:none;">
+    <span class="value" id="labelHeightVal">140</span><span class="unit">cm</span>
+  </div>
 
-    <!-- Toast para explicaciones -->
-    <div id="explanationToast" class="explain-toast">
-        <i class="fas fa-info-circle"></i>
-        <span id="toastText">Toca cualquier botón o tarjeta para ver qué hace.</span>
-    </div>
+  <div class="hud">
+    <div class="hud-chip"><span class="dot"></span><span id="fpsCounter">60 FPS</span></div>
+    <div class="hud-chip">PBR · HDRI</div>
+  </div>
 
-    <!-- Botón flotante ayuda -->
-    <div class="fab-help" onclick="showExplanation('Modo guía: cada elemento tiene una explicación. Tócalos para descubrir su función.')">
-        <i class="fas fa-question"></i>
-    </div>
-    <div style="font-size:12px; color:#94A3B8; margin-top: 12px; text-align:center;">
-        AlumiFlow · Flujo completo de carpintería
-    </div>
+  <div class="help-hint">
+    <strong>Controles:</strong><br>
+    🖱️ Arrastra para rotar · Scroll zoom<br>
+    ⌨️ <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> rotar
+  </div>
+
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <div class="loader-text">MundoCanceles · Cargando despiece técnico...</div>
+  </div>
 </div>
 
-<script>
-    // Función para mostrar explicación en toast
-    const toastEl = document.getElementById('explanationToast');
-    const toastText = document.getElementById('toastText');
-
-    function showExplanation(message) {
-        toastText.innerText = message;
-        toastEl.classList.add('show');
-        // Ocultar después de 4 segundos
-        clearTimeout(window.toastTimeout);
-        window.toastTimeout = setTimeout(() => {
-            toastEl.classList.remove('show');
-        }, 4000);
-    }
-
-    // Cerrar toast al tocarlo
-    toastEl.addEventListener('click', function() {
-        toastEl.classList.remove('show');
-    });
-
-    // También mostrar un mensaje inicial al cargar
-    window.onload = function() {
-        setTimeout(() => {
-            showExplanation('👋 Bienvenido a AlumiFlow. Toca cualquier botón, tarjeta o módulo para conocer su función dentro del flujo de trabajo.');
-        }, 300);
-    };
-
-    // Agregar comportamiento a otros elementos interactivos no cubiertos (prevenir recarga)
-    document.querySelectorAll('.action-card, .feed-item, .stepper-card, .module, .btn, .task-tag, .install-card, .payment-card, .service-card, .search-box').forEach(el => {
-        el.addEventListener('click', (e) => {
-            // Evitar que el click del botón recargue o haga submit
-            if (el.tagName === 'BUTTON' || el.classList.contains('btn')) {
-                e.preventDefault();
-            }
-            // La función showExplanation ya se llama desde onclick, pero aseguramos que no se duplique
-        });
-    });
-
-    // Algunos elementos ya tienen onclick, pero agregamos uno genérico por si no tienen
-    // (evitamos doble disparo)
-    // No sobreescribimos.
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
 </script>
+<script type="module" src="js/main.js"></script>
+
 </body>
 </html>

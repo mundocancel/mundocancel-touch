@@ -129,4 +129,4 @@
             letter-spacing: 0.05em;
         }
         .command-list div { padding: 6px; cursor: pointer; }
-        .command-list div:hover { background: rgba(255,255,255,0.1); }/* mundocancel Touch — repo oficial normalizado */
+        .command-list div:hover { background: rgba(255,255,255,0.1); }
